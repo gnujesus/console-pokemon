@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "7soEByP1c8ELiU/0ZaiMPo1/VJW33BVHiDn2EYwH93LNQFjm+NKx8WkdqAvQS9VM8lLpwLTcdVbecNFkngCqgA==",
+  "success": true,
+  "projectFilePath": "/home/aether/vimwiki/fundamentos-de-programacion/tetris/pokemonproject.csproj",
+  "expectedPackageFiles": [
+    "/home/aether/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.7/microsoft.aspnetcore.app.ref.7.0.7.nupkg.sha512"
+  ],
+  "logs": []
+}
