@@ -1,4 +1,3 @@
-
 class Menu
 {
     private int SelectedIndex;
