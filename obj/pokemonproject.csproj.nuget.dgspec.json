@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/aether/vimwiki/fundamentos-de-programacion/tetris/pokemonproject.csproj": {}
+    "/home/aether/vimwiki/fundamentos-de-programacion/console-pokemon/pokemonproject.csproj": {}
   },
   "projects": {
-    "/home/aether/vimwiki/fundamentos-de-programacion/tetris/pokemonproject.csproj": {
+    "/home/aether/vimwiki/fundamentos-de-programacion/console-pokemon/pokemonproject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/aether/vimwiki/fundamentos-de-programacion/tetris/pokemonproject.csproj",
+        "projectUniqueName": "/home/aether/vimwiki/fundamentos-de-programacion/console-pokemon/pokemonproject.csproj",
         "projectName": "pokemonproject",
-        "projectPath": "/home/aether/vimwiki/fundamentos-de-programacion/tetris/pokemonproject.csproj",
+        "projectPath": "/home/aether/vimwiki/fundamentos-de-programacion/console-pokemon/pokemonproject.csproj",
         "packagesPath": "/home/aether/.nuget/packages/",
-        "outputPath": "/home/aether/vimwiki/fundamentos-de-programacion/tetris/obj/",
+        "outputPath": "/home/aether/vimwiki/fundamentos-de-programacion/console-pokemon/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/aether/.nuget/NuGet/NuGet.Config"

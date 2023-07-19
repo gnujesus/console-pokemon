@@ -7,7 +7,7 @@ class Program
 
         string[] mainOptions = { "Jugar", "Ajustes", "Salir" };
         string[] settingsOptions = { "Volumen", "Idioma", "Volver Atrás" };
-        string[] languageOptions = { "Español", "Inglés" };
+        string[] languageOptions = { "Español", "Inglés", "Volver Atrás" };
         string[] gameOptions = { "Pikachu", "Charizard", "Volver Atrás" };
 
         string[] engMainOptions = { "Play", "Settings", "Exit" };
@@ -18,7 +18,8 @@ class Program
         string[] items = File.ReadAllLines(itemsFile)!;
 
         string prompt = "Qué desea hacer?";
-        string gamePrompt = "Seleccione su Pokemón";
+        string gamePrompt = @"   JUGADOR 1 
+                                                     Seleccione su Pokemón";
         // string engPrompt = "What would you like to do?";
         string currentLanguage = "esp";
 
@@ -52,12 +53,25 @@ class Program
                     {
                         case 0:
 
-                            Console.WriteLine($"JUGADOR 1: {firstPlayerPokemon}");
-                            Console.WriteLine($"JUGADOR 2: {secondPlayerPokemon}");
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine(@$"
 
-                            Console.WriteLine("Presione 'ENTER' para comenzar.");
+
+                                                        JUGADOR 1: {firstPlayerPokemon}");
+
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine(@$"
+                                                        JUGADOR 2: {secondPlayerPokemon}");
+
+                            Console.ResetColor();
+                            Console.WriteLine(@"
+                                                    
+                                                    Presione 'ENTER' para comenzar.");
                             Console.ReadLine();
 
+                            loadingAnimation();
+
+                            game.Run(firstPlayerPokemon);
                             break;
                         case 1:
                             firstPlayerPokemon = "Charizard";
@@ -65,14 +79,29 @@ class Program
 
                             Console.WriteLine();
 
-                            Console.WriteLine($"JUGADOR 1: {firstPlayerPokemon}");
-                            Console.WriteLine($"JUGADOR 2: {secondPlayerPokemon}");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine(@$"
+
+
+                                                        JUGADOR 1: {firstPlayerPokemon}");
+
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine(@$"
+                                                        JUGADOR 2: {secondPlayerPokemon}");
+
+                            Console.ResetColor();
+                            Console.WriteLine(@"
+                                                    
+                                                    Presione 'ENTER' para comenzar.");
+                            Console.ReadLine();
 
                             Console.WriteLine("Presione 'ENTER' para comenzar.");
                             Console.ReadLine();
 
-                            break;
+                            loadingAnimation();
 
+                            game.Run(firstPlayerPokemon);
+                            break;
                         case 3:
                             break;
                     }
@@ -91,6 +120,8 @@ class Program
                                 case 0:
                                     break;
                                 case 1:
+                                    break;
+                                case 2:
                                     break;
                             }
                             break;
@@ -143,6 +174,59 @@ class Program
         }
     }
 
+    static void loadingAnimation()
+    {
+        string loadingAscii = @"
+                        
+
+         
+                
+                                        ██       ██████   █████  ██████  ██ ███    ██  ██████  
+                                        ██      ██    ██ ██   ██ ██   ██ ██ ████   ██ ██       
+                                        ██      ██    ██ ███████ ██   ██ ██ ██ ██  ██ ██   ███ 
+                                        ██      ██    ██ ██   ██ ██   ██ ██ ██  ██ ██ ██    ██ 
+                                        ███████  ██████  ██   ██ ██████  ██ ██   ████  ██████    ";
+
+        string dot = "  ██  ";
+
+        int counter = 0;
+        ConsoleColor foregroundColor1 = ConsoleColor.Red;
+        ConsoleColor foregroundColor2 = ConsoleColor.Cyan;
+
+        while (true)
+        {
+            Console.Clear();
+
+            int leftOver = counter % 2;
+
+
+
+            Console.Write(loadingAscii);
+
+            for (int i = 0; i < 3; i++)
+            {
+                switch (leftOver)
+                {
+                    case 0:
+                        Console.ForegroundColor = foregroundColor1;
+                        break;
+
+                    case 1:
+                        Console.ForegroundColor = foregroundColor2;
+                        break;
+
+                }
+                Console.Write(dot);
+                Thread.Sleep(1000);
+            }
+            counter++;
+            if (counter > 4)
+            {
+                break;
+            }
+        }
+
+    }
 
     static Dictionary<string, int> individualValues()
     {

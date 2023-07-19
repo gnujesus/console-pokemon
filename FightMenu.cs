@@ -1,4 +1,4 @@
-class Menu
+class FightMenu
 {
     private int SelectedIndex;
     private string[] Options;
@@ -6,9 +6,9 @@ class Menu
     private bool EnterWasPressed;
     private string[] YesOrNo;
     private string[] SiONo;
-    private string welcomeAscii;
+    private string pokemonsAscii;
 
-    public Menu(string[] options, string prompt)
+    public FightMenu(string[] options, string prompt)
     {
         Console.CursorVisible = false;
 
@@ -18,16 +18,34 @@ class Menu
         EnterWasPressed = false;
         YesOrNo = new string[] { "Yes", "No" };
         SiONo = new string[] { "Sí", "No" };
-        welcomeAscii = @"
-
-
-
-                                ██████   ██████  ██   ██ ███████ ███    ███  ██████  ███    ██ 
-                                ██   ██ ██    ██ ██  ██  ██      ████  ████ ██    ██ ████   ██ 
-                                ██████  ██    ██ █████   █████   ██ ████ ██ ██    ██ ██ ██  ██ 
-                                ██      ██    ██ ██  ██  ██      ██  ██  ██ ██    ██ ██  ██ ██ 
-                                ██       ██████  ██   ██ ███████ ██      ██  ██████  ██   ████ 
-
+        pokemonsAscii = @"
+                                                      
+               MM                                MMM 
+               MMMMM                          MMMMMM
+               MMMMMMMM   MMMMMMMMMMMMMMM  MMMMMMMM
+                MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+                   MMMMMMMMMMMMMMMMMMMMMMMMMMMM
+                     MMMMMMMMMMMMMMMMMMMMMMMM
+NNNNNNNNN            MMM   MMMMMMMMMMMMM   MMM
+NNNNNNNNNNNNNN      MMMM   MMMMMMMMMMMMM   MMMM
+NNNNNNNNNNNNNNNNNN MMMMMMMMMMMMMMMMMMMMMMMMMMMM
+NNNNNNNNNNNNNNNNNN MMM  MMMMMMMMMMMMMMMMMM  MMM
+            NNNNNN  MM  MMMMMM       MMMMM  MMM
+            NNNNNN   MMMMMMMMMMMMMMMMMMMMMMMMM
+           NNNNNN    MMMMMMMMMMMMMMMMMMMMMMMM
+          NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMM
+         NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMMMM
+        NNNNNNN    MMMMMMMMMMMMMMMMMMMMMMMMMMMM
+         NNNNNNNNNNMMM.MMM.MMMMMMMMMMMMM.MMM.MMM
+             NNNNNNMMM.MMM.MMMMMMMMMMMMM.MMM.MMM
+               NNNNMMM.MMM.MMMMMMMMMMMMM.MMM.MMM
+                  MMMMM...MMMMMMMMMMMMMMM...MMMM
+                  MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+                   MMMMMMMMMMMMMMMMMMMMMMMMMMMM
+                    MMMMMMMMMMMMMMMMMMMMMMMMMM
+                      MMMMMMMMMMMMMMMMMMMMMMM
+                      MMMMMMMMMMMMMMMMMMMMMM
+                    MMMMMM               MMMMM
                                                                
         ";
 
@@ -39,18 +57,21 @@ class Menu
         ConsoleColor foregroundColor = ConsoleColor.Cyan;
         ConsoleColor optionForegroundColor = ConsoleColor.Green;
         Console.ForegroundColor = foregroundColor;
-        Console.Write(welcomeAscii);
+        Console.Write(pokemonsAscii);
         Console.ResetColor();
-        Console.WriteLine(@$"                                               {Prompt}
+        Console.WriteLine(@$"                                               
+                                                                {Prompt}
             
             
             ");
+
+        string spaces = @"                                               ";
+        Console.Write(spaces);
 
         for (int i = 0; i < Options.Length; i++)
         {
             string currentOption = Options[i];
             string prefix;
-            string spaces = @"                                                       ";
 
             if (i == SelectedIndex)
             {
@@ -67,7 +88,7 @@ class Menu
                 Console.ResetColor();
             }
 
-            Console.WriteLine($"{spaces} {prefix} {currentOption.ToUpper()}");
+            Console.Write($"{prefix} {currentOption.ToUpper()}   ");
         }
         Console.ResetColor();
     }
@@ -87,6 +108,7 @@ class Menu
                     SelectedIndex++;
                     break;
                 }
+
             case ConsoleKey.RightArrow:
                 if (SelectedIndex == Options.Length - 1)
                 {
@@ -94,7 +116,7 @@ class Menu
                 }
                 else
                 {
-                    SelectedIndex += 2;
+                    SelectedIndex++;
                     break;
                 }
 
@@ -110,16 +132,15 @@ class Menu
                 }
 
             case ConsoleKey.LeftArrow:
-                if (SelectedIndex == Options.Length - 1)
+                if (SelectedIndex == 0)
                 {
                     break;
                 }
                 else
                 {
-                    SelectedIndex -= 2;
+                    SelectedIndex--;
                     break;
                 }
-
 
             case ConsoleKey.Enter:
                 EnterWasPressed = true;
@@ -127,7 +148,7 @@ class Menu
         }
     }
 
-    public int Run()
+    public int Run(string firstPlayerPokemon)
     {
         ConsoleKeyInfo pressedKey;
 
@@ -149,15 +170,11 @@ class Menu
 
     }
 
+
     private void ResetVariables()
     {
         EnterWasPressed = false;
         SelectedIndex = 0;
     }
 
-    public void changeLanguage(string[] newOptions, string newPrompt)
-    {
-        Options = newOptions;
-        Prompt = newPrompt;
-    }
 }
