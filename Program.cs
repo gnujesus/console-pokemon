@@ -28,16 +28,18 @@ class Program
         Menu settingsMenu = new Menu(settingsOptions, prompt);
         Menu languageMenu = new Menu(languageOptions, prompt);
         Menu gameMenu = new Menu(gameOptions, gamePrompt);
-        Pokemon pikachu = new Pokemon("Pikachu", "Electric", 25, statistics(35, 55, 40, 50, 50, 90), individualValues(), effortValues());
-        Pokemon charizard = new Pokemon("Pikachu", "Electric", 25, statistics(78, 84, 78, 109, 85, 100), individualValues(), effortValues());
+        // Pokemon pikachu = new Pokemon("Pikachu", "Electric", 25, statistics(35, 55, 40, 50, 50, 90), individualValues(), effortValues());
+        // Pokemon charizard = new Pokemon("Pikachu", "Electric", 25, statistics(78, 84, 78, 109, 85, 100), individualValues(), effortValues());
         Bag playerOneBag = new Bag(GetRandomElements(items));
         Bag playerTwoBag = new Bag(GetRandomElements(items));
 
+
         #endregion
 
-        string playerOnePokemon = "Pikachu";
-        string playerTwoPokemon = "Charizard";
+        string firstPlayerPokemon = "Pikachu";
+        string secondPlayerPokemon = "Charizard";
 
+        Game game = new Game(firstPlayerPokemon, secondPlayerPokemon);
 
         bool running = true;
 
@@ -50,21 +52,21 @@ class Program
                     {
                         case 0:
 
-                            Console.WriteLine($"JUGADOR 1: {playerOnePokemon}");
-                            Console.WriteLine($"JUGADOR 2: {playerTwoPokemon}");
+                            Console.WriteLine($"JUGADOR 1: {firstPlayerPokemon}");
+                            Console.WriteLine($"JUGADOR 2: {secondPlayerPokemon}");
 
                             Console.WriteLine("Presione 'ENTER' para comenzar.");
                             Console.ReadLine();
 
                             break;
                         case 1:
-                            playerOnePokemon = "Charizard";
-                            playerTwoPokemon = "Pikachu";
+                            firstPlayerPokemon = "Charizard";
+                            secondPlayerPokemon = "Pikachu";
 
                             Console.WriteLine();
 
-                            Console.WriteLine($"JUGADOR 1: {playerOnePokemon}");
-                            Console.WriteLine($"JUGADOR 2: {playerTwoPokemon}");
+                            Console.WriteLine($"JUGADOR 1: {firstPlayerPokemon}");
+                            Console.WriteLine($"JUGADOR 2: {secondPlayerPokemon}");
 
                             Console.WriteLine("Presione 'ENTER' para comenzar.");
                             Console.ReadLine();
@@ -141,18 +143,6 @@ class Program
         }
     }
 
-    static Dictionary<string, int> statistics(int HP, int Attack, int Defense, int SpAttack, int SpDefense, int Speed)
-    {
-        Dictionary<string, int> stats = new Dictionary<string, int>(6);
-        stats.Add("HP", HP);
-        stats.Add("Attack", Attack);
-        stats.Add("Defense", Defense);
-        stats.Add("Sp. Attack", SpAttack);
-        stats.Add("Sp. Defense", SpDefense);
-        stats.Add("Speed", Speed);
-
-        return stats;
-    }
 
     static Dictionary<string, int> individualValues()
     {
@@ -171,19 +161,6 @@ class Program
     }
 
     // Nomar
-    static Dictionary<string, int> effortValues()
-    {
-        Dictionary<string, int> EVs = new Dictionary<string, int>
-        {
-            { "HP", 0 },
-            { "Attack", 0 },
-            { "Defense", 0 },
-            { "Sp. Attack", 0 },
-            { "Sp. Defense", 0 },
-            { "Speed", 0 }
-        };
-        return EVs;
-    }
 
     // Emelind
 
