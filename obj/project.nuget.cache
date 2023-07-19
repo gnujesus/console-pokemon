@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "9VxE3mpUJp8MtO5UC6KCbaidRssME9Uz3EURE62b5cG5aO+RJg3fOENsuztemam0O0Xrz9FMOGIkvIHhoulI5A==",
+  "dgSpecHash": "R4GXZFOf0OxxcPHio2Vx3JCATaNSlSRyWON07yDlOv2kQUoXSEmCrxDsRESbkNey7ytvTsPTESRBGTYf+LtsFA==",
   "success": true,
   "projectFilePath": "/home/aether/vimwiki/fundamentos-de-programacion/console-pokemon/pokemonproject.csproj",
   "expectedPackageFiles": [
-    "/home/aether/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.7/microsoft.aspnetcore.app.ref.7.0.7.nupkg.sha512"
+    "/home/aether/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.9/microsoft.aspnetcore.app.ref.7.0.9.nupkg.sha512"
   ],
   "logs": []
 }

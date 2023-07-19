@@ -31,8 +31,6 @@ class Program
         Menu gameMenu = new Menu(gameOptions, gamePrompt);
         // Pokemon pikachu = new Pokemon("Pikachu", "Electric", 25, statistics(35, 55, 40, 50, 50, 90), individualValues(), effortValues());
         // Pokemon charizard = new Pokemon("Pikachu", "Electric", 25, statistics(78, 84, 78, 109, 85, 100), individualValues(), effortValues());
-        Bag playerOneBag = new Bag(GetRandomElements(items));
-        Bag playerTwoBag = new Bag(GetRandomElements(items));
 
 
         #endregion
@@ -239,25 +237,6 @@ class Program
 
 
         return IVs;
-    }
-
-    // Nomar
-
-    // Emelind
-
-
-    static string[] GetRandomElements(string[] array)
-    {
-        Random random = new Random();
-        int elementsToReturn = Math.Min(6, array.Length);
-        int[] indices = Enumerable.Range(0, array.Length).OrderBy(x => random.Next()).Take(elementsToReturn).ToArray();
-        string[] randomElements = indices.Select(P => array[P]).ToArray();
-        foreach (string value in randomElements)
-        {
-            Console.WriteLine(value);
-        }
-
-        return randomElements;
     }
 
 

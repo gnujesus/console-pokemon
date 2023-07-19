@@ -2,8 +2,8 @@ class Game
 {
     #region Menus
     private FightMenu GameMenu;
-    private FightMenu PlayerOneBagMenu;
-    private FightMenu PlayerTwoBagMenu;
+    private BagMenu PlayerOneBagMenu;
+    private BagMenu PlayerTwoBagMenu;
     private FightMenu PikachuInfoMenu;
     private FightMenu CharizardInfoMenu;
     private string Prompt;
@@ -85,8 +85,8 @@ class Game
         PlayerOneBagOptions = PlayerOneBag.Items;
         PlayerTwoBagOptions = PlayerOneBag.Items;
         GameMenu = new FightMenu(Options, Prompt);
-        PlayerOneBagMenu = new FightMenu(PlayerOneBagOptions, Prompt);
-        PlayerTwoBagMenu = new FightMenu(PlayerTwoBagOptions, Prompt);
+        PlayerOneBagMenu = new BagMenu(PlayerOneBagOptions, Prompt);
+        PlayerTwoBagMenu = new BagMenu(PlayerTwoBagOptions, Prompt);
 
         Pikachu = new Pokemon("Pikachu", "Electric", 25, statistics(35, 55, 40, 50, 50, 90), individualValues(), effortValues());
         Charizard = new Pokemon("Pikachu", "Electric", 25, statistics(78, 84, 78, 109, 85, 100), individualValues(), effortValues());
@@ -154,7 +154,12 @@ class Game
             Console.WriteLine(value);
         }
 
-        return randomElements;
+        List<string> randomElementsWithBackOption = new List<string>(randomElements);
+        randomElementsWithBackOption.Add("Volver Atrás");
+        string[] finalRandomElements = randomElementsWithBackOption.ToArray();
+
+        return finalRandomElements;
+
     }
 
     public void Run(string playerOnePokemon, string playerTwoPokemon)
@@ -173,11 +178,24 @@ class Game
                 case 1:
                     if (playerOne == true)
                     {
-                        PlayerOneBagMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne);
+
+                        switch (PlayerOneBagMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
+                        {
+                            case 0:
+                                break;
+                            case 7:
+                                break;
+                        }
                     }
                     else
                     {
-                        PlayerTwoBagMenu.Run(playerTwoPokemon, playerTwoPokemon, playerOne);
+                        switch (PlayerTwoBagMenu.Run(playerTwoPokemon, playerTwoPokemon, playerOne))
+                        {
+                            case 0:
+                                break;
+                            case 7:
+                                break;
+                        }
                     }
                     break;
 
@@ -210,7 +228,6 @@ class Game
 
 
             }
-            break;
         }
     }
 

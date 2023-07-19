@@ -50,12 +50,12 @@ class Pokemon
     public string returnInfo()
     {
         string info = @$"
-        HP:          {inGameStats["HP"]} 
-        Attack:      {inGameStats["Attack"]} 
-        Defense:     {inGameStats["Defense"]} 
-        Sp. Attack:  {inGameStats["Sp. Attack"]} 
-        Sp. Defense: {inGameStats["Sp. Defense"]} 
-        Speed:       {inGameStats["Speed"]} 
+                                                                                    HP:          {inGameStats["HP"]} 
+                                                                                    Attack:      {inGameStats["Attack"]} 
+                                                                                    Defense:     {inGameStats["Defense"]} 
+                                                                                    Sp. Attack:  {inGameStats["Sp. Attack"]} 
+                                                                                    Sp. Defense: {inGameStats["Sp. Defense"]} 
+                                                                                    Speed:       {inGameStats["Speed"]} 
         ";
 
         return info;
