@@ -1,6 +1,7 @@
 class Bag
 {
-    private string[] Items;
+    public string[] Items;
+
 
     public Bag(string[] items)
     {

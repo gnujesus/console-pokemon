@@ -87,16 +87,6 @@ class Menu
                     SelectedIndex++;
                     break;
                 }
-            case ConsoleKey.RightArrow:
-                if (SelectedIndex == Options.Length - 1)
-                {
-                    break;
-                }
-                else
-                {
-                    SelectedIndex += 2;
-                    break;
-                }
 
             case ConsoleKey.UpArrow:
                 if (SelectedIndex == 0)
@@ -109,16 +99,6 @@ class Menu
                     break;
                 }
 
-            case ConsoleKey.LeftArrow:
-                if (SelectedIndex == Options.Length - 1)
-                {
-                    break;
-                }
-                else
-                {
-                    SelectedIndex -= 2;
-                    break;
-                }
 
 
             case ConsoleKey.Enter:

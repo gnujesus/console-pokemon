@@ -5,7 +5,7 @@ class Pokemon
     private Dictionary<string, int> BaseStats;
     private Dictionary<string, int> EVs;
     private Dictionary<string, int> IVs;
-    private Dictionary<string, int> inGameStats;
+    public Dictionary<string, int> inGameStats;
     private int Level;
     private int Nature;
     private Random rnd;
@@ -45,6 +45,20 @@ class Pokemon
                 inGameStats[value] = ((((2 * BaseStats[value] + IVs[value] + (EVs[value] / 4) * Level)) / 100) + 5) * Nature;
             }
         }
+    }
+
+    public string returnInfo()
+    {
+        string info = @$"
+        HP:          {inGameStats["HP"]} 
+        Attack:      {inGameStats["Attack"]} 
+        Defense:     {inGameStats["Defense"]} 
+        Sp. Attack:  {inGameStats["Sp. Attack"]} 
+        Sp. Defense: {inGameStats["Sp. Defense"]} 
+        Speed:       {inGameStats["Speed"]} 
+        ";
+
+        return info;
     }
 
 }

@@ -51,7 +51,7 @@ NNNNNNNNNNNNNNNNNN MMM  MMMMMMMMMMMMMMMMMM  MMM
 
     }
 
-    private void DisplayOptions()
+    private void DisplayOptions(string playerOnePokemon)
     {
         Console.Clear();
         ConsoleColor foregroundColor = ConsoleColor.Cyan;
@@ -60,7 +60,7 @@ NNNNNNNNNNNNNNNNNN MMM  MMMMMMMMMMMMMMMMMM  MMM
         Console.Write(pokemonsAscii);
         Console.ResetColor();
         Console.WriteLine(@$"                                               
-                                                                {Prompt}
+                                                                {Prompt}, {playerOnePokemon.ToUpper()}
             
             
             ");
@@ -148,14 +148,21 @@ NNNNNNNNNNNNNNNNNN MMM  MMMMMMMMMMMMMMMMMM  MMM
         }
     }
 
-    public int Run(string firstPlayerPokemon)
+    public int Run(string playerOnePokemon, string playerTwoPokemon, bool playerOne)
     {
         ConsoleKeyInfo pressedKey;
 
         while (true)
         {
 
-            DisplayOptions();
+            if (playerOne)
+            {
+                DisplayOptions(playerOnePokemon);
+            }
+            else
+            {
+                DisplayOptions(playerTwoPokemon);
+            }
 
             pressedKey = Console.ReadKey();
 
@@ -169,6 +176,8 @@ NNNNNNNNNNNNNNNNNN MMM  MMMMMMMMMMMMMMMMMM  MMM
         }
 
     }
+
+
 
 
     private void ResetVariables()

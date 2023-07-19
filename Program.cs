@@ -40,7 +40,7 @@ class Program
         string firstPlayerPokemon = "Pikachu";
         string secondPlayerPokemon = "Charizard";
 
-        Game game = new Game(firstPlayerPokemon, secondPlayerPokemon);
+        Game game = new Game();
 
         bool running = true;
 
@@ -71,7 +71,7 @@ class Program
 
                             loadingAnimation();
 
-                            game.Run(firstPlayerPokemon);
+                            game.Run(firstPlayerPokemon, secondPlayerPokemon);
                             break;
                         case 1:
                             firstPlayerPokemon = "Charizard";
@@ -95,12 +95,9 @@ class Program
                                                     Presione 'ENTER' para comenzar.");
                             Console.ReadLine();
 
-                            Console.WriteLine("Presione 'ENTER' para comenzar.");
-                            Console.ReadLine();
-
                             loadingAnimation();
 
-                            game.Run(firstPlayerPokemon);
+                            game.Run(firstPlayerPokemon, secondPlayerPokemon);
                             break;
                         case 3:
                             break;
