@@ -66,12 +66,15 @@ class FightMenu
         Console.Write(pokemonsAscii);
         Console.ResetColor();
         Console.WriteLine(@$"                                               
-                                                                                                {Prompt}, {playerOnePokemon.ToUpper()}
+                                                                                                {Prompt}
+                                                                                                
+
+                                                                                                 {playerOnePokemon.ToUpper()}
             
             
             ");
 
-        string spaces = @"                                                                                   ";
+        string spaces = @"                                                                             ";
         Console.Write(spaces);
 
         for (int i = 0; i < Options.Length; i++)

@@ -1,14 +1,14 @@
-class BagMenu
+class CantFleeMenu
 {
     private int SelectedIndex;
-    public string[] Options;
+    private string[] Options;
     private string Prompt;
     private bool EnterWasPressed;
     private string[] YesOrNo;
     private string[] SiONo;
     private string pokemonsAscii;
 
-    public BagMenu(string[] options, string prompt)
+    public CantFleeMenu(string[] options, string prompt)
     {
         Console.CursorVisible = false;
 
@@ -18,7 +18,6 @@ class BagMenu
         EnterWasPressed = false;
         YesOrNo = new string[] { "Yes", "No" };
         SiONo = new string[] { "Sí", "No" };
-
         pokemonsAscii = @"
                                                       
                                                        
@@ -56,7 +55,6 @@ class BagMenu
 
         ";
 
-
     }
 
     private void DisplayOptions(string playerOnePokemon)
@@ -68,12 +66,16 @@ class BagMenu
         Console.Write(pokemonsAscii);
         Console.ResetColor();
         Console.WriteLine(@$"                                               
-                                                                                            {Prompt}, {playerOnePokemon.ToUpper()}
+                                                                                            {Prompt}
+                                                                                            
+
+                                                                                               {playerOnePokemon.ToUpper()}
             
             
             ");
 
-        string spaces = @"                                                                                           ";
+        string spaces = @"                                                                                          ";
+        Console.Write(spaces);
 
         for (int i = 0; i < Options.Length; i++)
         {
@@ -95,7 +97,7 @@ class BagMenu
                 Console.ResetColor();
             }
 
-            Console.WriteLine($"{spaces} {prefix} {currentOption.ToUpper()}   ");
+            Console.Write($"{prefix} {currentOption.ToUpper()}   ");
         }
         Console.ResetColor();
     }

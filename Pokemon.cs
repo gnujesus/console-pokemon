@@ -24,18 +24,22 @@ class Pokemon
         Type = type;
         inGameStats = new Dictionary<string, int> { };
 
-        inGameStats.Add("HP", 0);
-        inGameStats.Add("Attack", 0);
-        inGameStats.Add("Defense", 0);
-        inGameStats.Add("Sp. Attack", 0);
-        inGameStats.Add("Sp. Defense", 0);
-        inGameStats.Add("Speed", 0);
+        inGameStats.Add("HP", 1);
+        inGameStats.Add("Attack", 1);
+        inGameStats.Add("Defense", 1);
+        inGameStats.Add("Sp. Attack", 1);
+        inGameStats.Add("Sp. Defense", 1);
+        inGameStats.Add("Speed", 1);
+
+        calculateInGameStats();
     }
 
-    private void calculateInGameStats()
+    public void calculateInGameStats()
     {
         foreach (string value in inGameStats.Keys)
         {
+            Console.WriteLine(value);
+
             if (value == "HP")
             {
                 inGameStats["HP"] = (((2 * BaseStats["HP"] + IVs["HP"] + (EVs["HP"] / 4) * Level)) / 100) + Level + 10;
@@ -50,12 +54,12 @@ class Pokemon
     public string returnInfo()
     {
         string info = @$"
-                                                                                    HP:          {inGameStats["HP"]} 
-                                                                                    Attack:      {inGameStats["Attack"]} 
-                                                                                    Defense:     {inGameStats["Defense"]} 
-                                                                                    Sp. Attack:  {inGameStats["Sp. Attack"]} 
-                                                                                    Sp. Defense: {inGameStats["Sp. Defense"]} 
-                                                                                    Speed:       {inGameStats["Speed"]} 
+                                                                                        HP:             {inGameStats["HP"]} 
+                                                                                        Attack:         {inGameStats["Attack"]} 
+                                                                                        Defense:        {inGameStats["Defense"]} 
+                                                                                        Sp. Attack:     {inGameStats["Sp. Attack"]} 
+                                                                                        Sp. Defense:    {inGameStats["Sp. Defense"]} 
+                                                                                        Speed:          {inGameStats["Speed"]} 
         ";
 
         return info;

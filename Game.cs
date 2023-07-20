@@ -4,15 +4,18 @@ class Game
     private FightMenu GameMenu;
     private BagMenu PlayerOneBagMenu;
     private BagMenu PlayerTwoBagMenu;
-    private FightMenu PikachuInfoMenu;
-    private FightMenu CharizardInfoMenu;
+    private InfoMenu PikachuInfoMenu;
+    private InfoMenu CharizardInfoMenu;
+    private CantFleeMenu cantFleeMenu;
     private string Prompt;
     private string[] Options;
     private string[] PlayerOneBagOptions;
     private string[] PlayerTwoBagOptions;
     private string[] InfoMenuOptions;
+    private string[] cantFleeOptions;
     private string PikachuInfoMenuPrompt;
     private string CharizardInfoMenuPrompt;
+    private string cantFleePrompt;
 
     #endregion
 
@@ -82,21 +85,28 @@ class Game
 
         Prompt = "QUÉ HARÁS?";
         Options = new string[] { "Atacar", "Mochila", "Pokemon", "Huir" };
+        cantFleeOptions = new string[] { "Volver Atrás" };
+        cantFleePrompt = "NO PUEDES HUIR!";
+
         PlayerOneBagOptions = PlayerOneBag.Items;
         PlayerTwoBagOptions = PlayerOneBag.Items;
         GameMenu = new FightMenu(Options, Prompt);
         PlayerOneBagMenu = new BagMenu(PlayerOneBagOptions, Prompt);
         PlayerTwoBagMenu = new BagMenu(PlayerTwoBagOptions, Prompt);
 
-        Pikachu = new Pokemon("Pikachu", "Electric", 25, statistics(35, 55, 40, 50, 50, 90), individualValues(), effortValues());
-        Charizard = new Pokemon("Pikachu", "Electric", 25, statistics(78, 84, 78, 109, 85, 100), individualValues(), effortValues());
+        Pikachu = new Pokemon("Pikachu", "Electric", 40, statistics(35, 55, 40, 50, 50, 90), individualValues(), effortValues(96, 96, 24, 136, 8, 148));
+        Charizard = new Pokemon("Pikachu", "Electric", 25, statistics(78, 84, 78, 109, 85, 100), individualValues(), effortValues(32, 120, 84, 112, 80, 32));
 
         InfoMenuOptions = new string[] { "Volver Atrás" };
         CharizardInfoMenuPrompt = Charizard.returnInfo();
         PikachuInfoMenuPrompt = Pikachu.returnInfo();
-        PikachuInfoMenu = new FightMenu(InfoMenuOptions, PikachuInfoMenuPrompt);
-        CharizardInfoMenu = new FightMenu(InfoMenuOptions, CharizardInfoMenuPrompt);
+        PikachuInfoMenu = new InfoMenu(InfoMenuOptions, PikachuInfoMenuPrompt);
+        CharizardInfoMenu = new InfoMenu(InfoMenuOptions, CharizardInfoMenuPrompt);
+        cantFleeMenu = new CantFleeMenu(cantFleeOptions, cantFleePrompt);
 
+
+        Pikachu.calculateInGameStats();
+        Charizard.calculateInGameStats();
     }
 
     private Dictionary<string, int> statistics(int HP, int Attack, int Defense, int SpAttack, int SpDefense, int Speed)
@@ -117,29 +127,28 @@ class Game
         Dictionary<string, int> IVs = new Dictionary<string, int>(6);
         Random rnd = new Random();
 
-        IVs.Add("HP", rnd.Next(0, 31));
-        IVs.Add("Attack", rnd.Next(0, 31));
-        IVs.Add("Defense", rnd.Next(0, 31));
-        IVs.Add("Sp. Attack", rnd.Next(0, 31));
-        IVs.Add("Sp. Defense", rnd.Next(0, 31));
-        IVs.Add("Speed", rnd.Next(0, 31));
+        IVs.Add("HP", rnd.Next(1, 31));
+        IVs.Add("Attack", rnd.Next(1, 31));
+        IVs.Add("Defense", rnd.Next(1, 31));
+        IVs.Add("Sp. Attack", rnd.Next(1, 31));
+        IVs.Add("Sp. Defense", rnd.Next(1, 31));
+        IVs.Add("Speed", rnd.Next(1, 31));
 
 
         return IVs;
     }
 
     // Nomar
-    private Dictionary<string, int> effortValues()
+    private Dictionary<string, int> effortValues(int HP, int Attack, int Defense, int SpAttack, int SpDefense, int Speed)
     {
-        Dictionary<string, int> EVs = new Dictionary<string, int>
-        {
-            { "HP", 0 },
-            { "Attack", 0 },
-            { "Defense", 0 },
-            { "Sp. Attack", 0 },
-            { "Sp. Defense", 0 },
-            { "Speed", 0 }
-        };
+        Dictionary<string, int> EVs = new Dictionary<string, int>();
+        EVs.Add("HP", HP);
+        EVs.Add("Attack", Attack);
+        EVs.Add("Defense", Defense);
+        EVs.Add("Sp. Attack", SpAttack);
+        EVs.Add("Sp. Defense", SpDefense);
+        EVs.Add("Speed", Speed);
+
         return EVs;
     }
 
@@ -162,6 +171,25 @@ class Game
 
     }
 
+    private int Heal(int HP, int Increment, int BaseHP)
+    {
+
+        int totalHP = HP + Increment;
+        if (totalHP > BaseHP)
+        {
+            totalHP = BaseHP;
+        }
+        return totalHP;
+    }
+
+    public void restoreAll(ref string currentEffect, ref int HP, int baseHealth)
+    {
+
+        currentEffect = string.Empty;
+
+        HP = baseHealth;
+    }
+
     public void Run(string playerOnePokemon, string playerTwoPokemon)
     {
         bool running = true;
@@ -176,12 +204,17 @@ class Game
                     break;
 
                 case 1:
-                    if (playerOne == true)
+                    if (playerOne)
                     {
 
                         switch (PlayerOneBagMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
                         {
                             case 0:
+                                switch (PlayerOneBagMenu.Options[0])
+                                {
+                                    case "Poción":
+                                        break;
+                                }
                                 break;
                             case 7:
                                 break;
@@ -205,9 +238,12 @@ class Game
                         switch (playerOnePokemon)
                         {
                             case "Pikachu":
+
                                 PikachuInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne);
                                 break;
+
                             case "Charizard":
+
                                 CharizardInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne);
                                 break;
                         }
@@ -225,7 +261,9 @@ class Game
                         }
                     }
                     break;
-
+                case 3:
+                    cantFleeMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne);
+                    break;
 
             }
         }

@@ -212,10 +212,10 @@ class Program
 
                 }
                 Console.Write(dot);
-                Thread.Sleep(1000);
+                Thread.Sleep(700);
             }
             counter++;
-            if (counter > 4)
+            if (counter > 2)
             {
                 break;
             }
