@@ -22,11 +22,11 @@ class Menu
 
 
 
-                                ██████   ██████  ██   ██ ███████ ███    ███  ██████  ███    ██ 
-                                ██   ██ ██    ██ ██  ██  ██      ████  ████ ██    ██ ████   ██ 
-                                ██████  ██    ██ █████   █████   ██ ████ ██ ██    ██ ██ ██  ██ 
-                                ██      ██    ██ ██  ██  ██      ██  ██  ██ ██    ██ ██  ██ ██ 
-                                ██       ██████  ██   ██ ███████ ██      ██  ██████  ██   ████ 
+                                                                        ██████   ██████  ██   ██ ███████ ███    ███  ██████  ███    ██ 
+                                                                        ██   ██ ██    ██ ██  ██  ██      ████  ████ ██    ██ ████   ██ 
+                                                                        ██████  ██    ██ █████   █████   ██ ████ ██ ██    ██ ██ ██  ██ 
+                                                                        ██      ██    ██ ██  ██  ██      ██  ██  ██ ██    ██ ██  ██ ██ 
+                                                                        ██       ██████  ██   ██ ███████ ██      ██  ██████  ██   ████ 
 
                                                                
         ";
@@ -41,7 +41,7 @@ class Menu
         Console.ForegroundColor = foregroundColor;
         Console.Write(welcomeAscii);
         Console.ResetColor();
-        Console.WriteLine(@$"                                               {Prompt}
+        Console.WriteLine(@$"                                                                                      {Prompt}
             
             
             ");
@@ -50,7 +50,7 @@ class Menu
         {
             string currentOption = Options[i];
             string prefix;
-            string spaces = @"                                                       ";
+            string spaces = @"                                                                                              ";
 
             if (i == SelectedIndex)
             {

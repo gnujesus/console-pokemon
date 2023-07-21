@@ -19,7 +19,7 @@ class Program
 
         string prompt = "Qué desea hacer?";
         string gamePrompt = @"   JUGADOR 1 
-                                                     Seleccione su Pokemón";
+                                                                                            Seleccione su Pokemón";
         // string engPrompt = "What would you like to do?";
         string currentLanguage = "esp";
 
@@ -55,16 +55,16 @@ class Program
                             Console.WriteLine(@$"
 
 
-                                                        JUGADOR 1: {firstPlayerPokemon}");
+                                                                                              JUGADOR 1: {firstPlayerPokemon}");
 
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine(@$"
-                                                        JUGADOR 2: {secondPlayerPokemon}");
+                                                                                              JUGADOR 2: {secondPlayerPokemon}");
 
                             Console.ResetColor();
                             Console.WriteLine(@"
                                                     
-                                                    Presione 'ENTER' para comenzar.");
+                                                                                          Presione 'ENTER' para comenzar.");
                             Console.ReadLine();
 
                             loadingAnimation();
@@ -81,16 +81,16 @@ class Program
                             Console.WriteLine(@$"
 
 
-                                                        JUGADOR 1: {firstPlayerPokemon}");
+                                                                                              JUGADOR 1: {firstPlayerPokemon}");
 
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine(@$"
-                                                        JUGADOR 2: {secondPlayerPokemon}");
+                                                                                              JUGADOR 2: {secondPlayerPokemon}");
 
                             Console.ResetColor();
                             Console.WriteLine(@"
                                                     
-                                                    Presione 'ENTER' para comenzar.");
+                                                                                          Presione 'ENTER' para comenzar.");
                             Console.ReadLine();
 
                             loadingAnimation();
@@ -176,11 +176,11 @@ class Program
 
          
                 
-                                        ██       ██████   █████  ██████  ██ ███    ██  ██████  
-                                        ██      ██    ██ ██   ██ ██   ██ ██ ████   ██ ██       
-                                        ██      ██    ██ ███████ ██   ██ ██ ██ ██  ██ ██   ███ 
-                                        ██      ██    ██ ██   ██ ██   ██ ██ ██  ██ ██ ██    ██ 
-                                        ███████  ██████  ██   ██ ██████  ██ ██   ████  ██████    ";
+                                                                                ██       ██████   █████  ██████  ██ ███    ██  ██████  
+                                                                                ██      ██    ██ ██   ██ ██   ██ ██ ████   ██ ██       
+                                                                                ██      ██    ██ ███████ ██   ██ ██ ██ ██  ██ ██   ███ 
+                                                                                ██      ██    ██ ██   ██ ██   ██ ██ ██  ██ ██ ██    ██ 
+                                                                                ███████  ██████  ██   ██ ██████  ██ ██   ████  ██████    ";
 
         string dot = "  ██  ";
 

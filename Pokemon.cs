@@ -1,7 +1,7 @@
 
 class Pokemon
 {
-    private string Name;
+    public string Name;
     private Dictionary<string, int> BaseStats;
     private Dictionary<string, int> EVs;
     private Dictionary<string, int> IVs;

@@ -7,15 +7,21 @@ class Game
     private InfoMenu PikachuInfoMenu;
     private InfoMenu CharizardInfoMenu;
     private CantFleeMenu cantFleeMenu;
+    private AttackMenu pikachuAttackMenu;
+    private AttackMenu charizardAttackMenu;
     private string Prompt;
     private string[] Options;
     private string[] PlayerOneBagOptions;
     private string[] PlayerTwoBagOptions;
     private string[] InfoMenuOptions;
-    private string[] cantFleeOptions;
+    private string[] goBackOption;
     private string PikachuInfoMenuPrompt;
     private string CharizardInfoMenuPrompt;
     private string cantFleePrompt;
+    private string attackMenuPrompt;
+    private string cantCatchAnothersTrainerPokemonPrompt;
+
+    private Dictionary<string, Pokemon> PlayersPokemons;
 
     #endregion
 
@@ -24,6 +30,10 @@ class Game
     #region Pokemons
     private Pokemon Pikachu;
     private Pokemon Charizard;
+    private Dictionary<string, Move> PikachuMoves;
+    private Dictionary<string, Move> CharizardMoves;
+    private string[] PikachuMoveOptions;
+    private string[] CharizardMoveOptions;
 
     #endregion
 
@@ -84,29 +94,57 @@ class Game
         PlayerTwoBag = new Bag(GetRandomElements(Items));
 
         Prompt = "QUÉ HARÁS?";
-        Options = new string[] { "Atacar", "Mochila", "Pokemon", "Huir" };
-        cantFleeOptions = new string[] { "Volver Atrás" };
         cantFleePrompt = "NO PUEDES HUIR!";
+        cantCatchAnothersTrainerPokemonPrompt = "NO PUEDES ATRAPAR EL POKEMON DE OTRO ENTRENADOR";
+        attackMenuPrompt = "ELIGE TU ATAQUE";
+        PikachuMoveOptions = new string[] { "Latigo", "Ataque Rápido", "Impactrueno", "Bola Voltio", "Onda Trueno", "Amago", "Volver Atrás" };
+        CharizardMoveOptions = new string[] { "Ataque Ala", "Tajo Aereo", "Aranazo", "Enviste Igneo", "Onda Ignea", "Ascuas", "Garra Dragon", "Volver Atrás" };
+        Options = new string[] { "Atacar", "Mochila", "Pokemon", "Huir" };
+
+        pikachuAttackMenu = new AttackMenu(PikachuMoveOptions, attackMenuPrompt);
+        charizardAttackMenu = new AttackMenu(CharizardMoveOptions, attackMenuPrompt);
+
 
         PlayerOneBagOptions = PlayerOneBag.Items;
         PlayerTwoBagOptions = PlayerOneBag.Items;
-        GameMenu = new FightMenu(Options, Prompt);
         PlayerOneBagMenu = new BagMenu(PlayerOneBagOptions, Prompt);
         PlayerTwoBagMenu = new BagMenu(PlayerTwoBagOptions, Prompt);
+        GameMenu = new FightMenu(Options, Prompt);
 
-        Pikachu = new Pokemon("Pikachu", "Electric", 40, statistics(35, 55, 40, 50, 50, 90), individualValues(), effortValues(96, 96, 24, 136, 8, 148));
-        Charizard = new Pokemon("Pikachu", "Electric", 25, statistics(78, 84, 78, 109, 85, 100), individualValues(), effortValues(32, 120, 84, 112, 80, 32));
+
+        Pikachu = new Pokemon("Pikachu", "Electric", 60, statistics(35, 55, 40, 50, 50, 90), individualValues(), effortValues(200, 40, 24, 136, 8, 148));
+        Charizard = new Pokemon("Charizard", "Fire", 20, statistics(78, 84, 78, 109, 85, 100), individualValues(), effortValues(200, 30, 84, 112, 80, 32));
 
         InfoMenuOptions = new string[] { "Volver Atrás" };
         CharizardInfoMenuPrompt = Charizard.returnInfo();
         PikachuInfoMenuPrompt = Pikachu.returnInfo();
         PikachuInfoMenu = new InfoMenu(InfoMenuOptions, PikachuInfoMenuPrompt);
         CharizardInfoMenu = new InfoMenu(InfoMenuOptions, CharizardInfoMenuPrompt);
-        cantFleeMenu = new CantFleeMenu(cantFleeOptions, cantFleePrompt);
+        cantFleeMenu = new CantFleeMenu(goBackOption, cantFleePrompt);
 
 
-        Pikachu.calculateInGameStats();
-        Charizard.calculateInGameStats();
+        PlayersPokemons = new Dictionary<string, Pokemon>();
+        PlayersPokemons.Add("First Player Pokemon", Pikachu);
+        PlayersPokemons.Add("Second Player Pokemon", Charizard);
+
+        PikachuMoves = new Dictionary<string, Move>();
+        PikachuMoves.Add("Latigo", latigo);
+        PikachuMoves.Add("Amago", amago);
+        PikachuMoves.Add("Impactrueno", impactrueno);
+        PikachuMoves.Add("Bola Voltio", bolaVoltio);
+        PikachuMoves.Add("Chispa", chispa);
+        PikachuMoves.Add("Ataque Rapido", ataqueRapido);
+        PikachuMoves.Add("Onda Trueno", ondaTrueno);
+
+        CharizardMoves = new Dictionary<string, Move>();
+        CharizardMoves.Add("Ataque Ala", ataqueAla);
+        CharizardMoves.Add("Tajo Aereo", tajoAereo);
+        CharizardMoves.Add("Aranazo", aranazo);
+        CharizardMoves.Add("Enviste Igneo", envisteIgneo);
+        CharizardMoves.Add("Onda Ignea", ondaIgnea);
+        CharizardMoves.Add("Ascuas", ascuas);
+        CharizardMoves.Add("Garra Dragon", garraDragon);
+
     }
 
     private Dictionary<string, int> statistics(int HP, int Attack, int Defense, int SpAttack, int SpDefense, int Speed)
@@ -127,7 +165,7 @@ class Game
         Dictionary<string, int> IVs = new Dictionary<string, int>(6);
         Random rnd = new Random();
 
-        IVs.Add("HP", rnd.Next(1, 31));
+        IVs.Add("HP", rnd.Next(10, 31));
         IVs.Add("Attack", rnd.Next(1, 31));
         IVs.Add("Defense", rnd.Next(1, 31));
         IVs.Add("Sp. Attack", rnd.Next(1, 31));
@@ -182,12 +220,89 @@ class Game
         return totalHP;
     }
 
-    public void restoreAll(ref string currentEffect, ref int HP, int baseHealth)
+    public void restoreAll(ref string currentEffect, ref int HP, int baseHealth, Pokemon healedPokemon)
     {
+        switch (healedPokemon.Name)
+        {
+            case "Pikachu":
+                Pikachu.inGameStats["Defense"] = Pikachu.inGameStats["Defense"];
+                Pikachu.inGameStats["HP"] = baseHealth;
+                Console.WriteLine("TODOS LOS EFECTOS HAN SIDO LIMPIADOS!");
+                break;
 
-        currentEffect = string.Empty;
 
-        HP = baseHealth;
+        }
+    }
+
+    public void decreaseHP(int HP, int decrement, Pokemon attackedPokemon, string attackType)
+    {
+        switch (attackedPokemon.Name)
+        {
+            case "Pikachu":
+                Pikachu.inGameStats["HP"] = HP - (decrement - (Pikachu.inGameStats["Defense"] / 2));
+                break;
+            case "Charizard":
+                Charizard.inGameStats["HP"] = HP - (decrement - (Pikachu.inGameStats["Defense"] / 2));
+                break;
+        }
+    }
+
+    public void itemsFunctionality(string item, string playerOnePokemon, string playerTwoPokemon)
+    {
+        switch (item)
+        {
+            case "Poción":
+                break;
+            case "Vidasfera":
+                break;
+            case "Sprite de Cinta Fuerte":
+                break;
+            case "Chaleco Asalto":
+                break;
+            case "Orison Soto":
+                break;
+            case "Superpoción":
+                break;
+            case "Hiperpoción":
+                break;
+            case "Restaurar Todo":
+                break;
+            case "Pokeball":
+                switch (playerOnePokemon)
+                {
+                    case "Pikachu":
+                        Console.WriteLine(@"
+                                                                                NO PUEDES ATRAPAR EL POKEMON DE OTRO JUGADOR! 
+                                                                                              Presiona 'ENTER'");
+                        Console.ReadLine();
+                        break;
+                    case "Charizard":
+                        Console.WriteLine(@"
+                                                                                NO PUEDES ATRAPAR EL POKEMON DE OTRO JUGADOR! 
+                                                                                              Presiona 'ENTER'");
+                        Console.ReadLine();
+                        break;
+                }
+                break;
+            case "Masterball":
+                switch (playerOnePokemon)
+                {
+                    case "Pikachu":
+                        Console.WriteLine(@"
+                                                                                NO PUEDES ATRAPAR EL POKEMON DE OTRO JUGADOR! 
+                                                                                              Presiona 'ENTER'");
+                        Console.ReadLine();
+                        break;
+                    case "Charizard":
+                        Console.WriteLine(@"
+                                                                                NO PUEDES ATRAPAR EL POKEMON DE OTRO JUGADOR! 
+                                                                                              Presiona 'ENTER'");
+                        Console.ReadLine();
+                        break;
+                }
+                break;
+        }
+        return;
     }
 
     public void Run(string playerOnePokemon, string playerTwoPokemon)
@@ -195,12 +310,136 @@ class Game
         bool running = true;
         bool playerOne = true;
 
-        while (running)
+        while (running && PlayersPokemons["First Player Pokemon"].inGameStats["HP"] != 0 && PlayersPokemons["Second Player Pokemon"].inGameStats["HP"] != 0)
         {
             switch (GameMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
             {
                 case 0:
-                    playerOne = !playerOne;
+                    if (playerOne)
+                    {
+                        switch (playerOnePokemon)
+                        {
+                            case "Pikachu":
+                                switch (pikachuAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
+                                {
+                                    case 0:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 1:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 2:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 3:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 4:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 5:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 6:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 7:
+                                        break;
+                                }
+                                break;
+                            case "Charizard":
+                                switch (charizardAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
+                                {
+                                    case 0:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 1:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 2:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 3:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 4:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 5:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 6:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 7:
+                                        break;
+                                }
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (playerTwoPokemon)
+                        {
+                            case "Pikachu":
+                                switch (pikachuAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
+                                {
+                                    case 0:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 1:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 2:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 3:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 4:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 5:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 6:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 7:
+                                        break;
+                                }
+                                break;
+                            case "Charizard":
+                                switch (charizardAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
+                                {
+                                    case 0:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 1:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 2:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 3:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 4:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 5:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 6:
+                                        playerOne = !playerOne;
+                                        break;
+                                    case 7:
+                                        break;
+                                }
+                                break;
+                        }
+
+                    }
                     break;
 
                 case 1:
@@ -210,11 +449,25 @@ class Game
                         switch (PlayerOneBagMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
                         {
                             case 0:
-                                switch (PlayerOneBagMenu.Options[0])
-                                {
-                                    case "Poción":
-                                        break;
-                                }
+                                itemsFunctionality(PlayerOneBagMenu.Options[0], playerOnePokemon, playerTwoPokemon);
+                                break;
+                            case 1:
+                                itemsFunctionality(PlayerOneBagMenu.Options[1], playerOnePokemon, playerTwoPokemon);
+                                break;
+                            case 2:
+                                itemsFunctionality(PlayerOneBagMenu.Options[2], playerOnePokemon, playerTwoPokemon);
+                                break;
+                            case 3:
+                                itemsFunctionality(PlayerOneBagMenu.Options[3], playerOnePokemon, playerTwoPokemon);
+                                break;
+                            case 4:
+                                itemsFunctionality(PlayerOneBagMenu.Options[4], playerOnePokemon, playerTwoPokemon);
+                                break;
+                            case 5:
+                                itemsFunctionality(PlayerOneBagMenu.Options[5], playerOnePokemon, playerTwoPokemon);
+                                break;
+                            case 6:
+                                itemsFunctionality(PlayerOneBagMenu.Options[6], playerOnePokemon, playerTwoPokemon);
                                 break;
                             case 7:
                                 break;
@@ -225,6 +478,24 @@ class Game
                         switch (PlayerTwoBagMenu.Run(playerTwoPokemon, playerTwoPokemon, playerOne))
                         {
                             case 0:
+                                break;
+                            case 1:
+                                itemsFunctionality(PlayerOneBagMenu.Options[1], playerOnePokemon, playerTwoPokemon);
+                                break;
+                            case 2:
+                                itemsFunctionality(PlayerOneBagMenu.Options[2], playerOnePokemon, playerTwoPokemon);
+                                break;
+                            case 3:
+                                itemsFunctionality(PlayerOneBagMenu.Options[3], playerOnePokemon, playerTwoPokemon);
+                                break;
+                            case 4:
+                                itemsFunctionality(PlayerOneBagMenu.Options[4], playerOnePokemon, playerTwoPokemon);
+                                break;
+                            case 5:
+                                itemsFunctionality(PlayerOneBagMenu.Options[5], playerOnePokemon, playerTwoPokemon);
+                                break;
+                            case 6:
+                                itemsFunctionality(PlayerOneBagMenu.Options[6], playerOnePokemon, playerTwoPokemon);
                                 break;
                             case 7:
                                 break;

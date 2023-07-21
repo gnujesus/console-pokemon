@@ -1,19 +1,16 @@
-class FightMenu
+class AttackMenu
 {
     private int SelectedIndex;
-    private string[] Options;
+    public string[] Options;
     private string Prompt;
     private bool EnterWasPressed;
     private string[] YesOrNo;
     private string[] SiONo;
     private string pokemonsAscii;
-    private int FirstPlayerHP;
-    private string SecondPlayerHP;
 
-    public FightMenu(string[] options, string prompt)
+    public AttackMenu(string[] options, string prompt)
     {
         Console.CursorVisible = false;
-
 
         Options = options;
         Prompt = prompt;
@@ -21,6 +18,7 @@ class FightMenu
         EnterWasPressed = false;
         YesOrNo = new string[] { "Yes", "No" };
         SiONo = new string[] { "Sí", "No" };
+
         pokemonsAscii = @"
                                                       
                                                        
@@ -51,12 +49,13 @@ class FightMenu
                            MMMMMMMMMMMMMMMMMMMMMMM                                                                                                           MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
                            MMMMMMMMMMMMMMMMMMMMMM                                                                                                             MMMMMMMMM            MMMMMMM
                          MMMMMM               MMMMM                                                                                                         MMMMMMMMMMMM           MMMMMMMMM
-
+                                                               
 
 
 
 
         ";
+
 
     }
 
@@ -69,16 +68,12 @@ class FightMenu
         Console.Write(pokemonsAscii);
         Console.ResetColor();
         Console.WriteLine(@$"                                               
-                                                                                                {Prompt}
-                                                                                                
-
-                                                                                                 {playerOnePokemon.ToUpper()}
+                                                                                            {Prompt}, {playerOnePokemon.ToUpper()}
             
             
             ");
 
-        string spaces = @"                                                                             ";
-        Console.Write(spaces);
+        string spaces = @"                                                                                           ";
 
         for (int i = 0; i < Options.Length; i++)
         {
@@ -100,7 +95,7 @@ class FightMenu
                 Console.ResetColor();
             }
 
-            Console.Write($"{prefix} {currentOption.ToUpper()}   ");
+            Console.WriteLine($"{spaces} {prefix} {currentOption.ToUpper()}   ");
         }
         Console.ResetColor();
     }
