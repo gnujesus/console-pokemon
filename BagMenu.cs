@@ -7,19 +7,25 @@ class BagMenu
     private string[] YesOrNo;
     private string[] SiONo;
     private string pokemonsAscii;
+    public int FirstPokemonBaseHP;
+    public int SecondPokemonBaseHP;
 
-    public BagMenu(string[] options, string prompt)
+    public BagMenu(string[] options, string prompt, int firstPokemonBaseHP, int secondPokemonBaseHP)
     {
         Console.CursorVisible = false;
 
         Options = options;
         Prompt = prompt;
         SelectedIndex = 0;
+
+        FirstPokemonBaseHP = firstPokemonBaseHP;
+        SecondPokemonBaseHP = secondPokemonBaseHP;
+
         EnterWasPressed = false;
         YesOrNo = new string[] { "Yes", "No" };
         SiONo = new string[] { "Sí", "No" };
 
-        pokemonsAscii = @"
+        pokemonsAscii = @$"
                                                       
                                                        
 
@@ -59,7 +65,7 @@ class BagMenu
 
     }
 
-    private void DisplayOptions(string playerOnePokemon)
+    private void DisplayOptions(string playerOnePokemon, int playerOnePokemonCurrentHP, int playerTwoPokemonCurrentHP)
     {
         Console.Clear();
         ConsoleColor foregroundColor = ConsoleColor.White;
@@ -67,6 +73,14 @@ class BagMenu
         Console.ForegroundColor = foregroundColor;
         Console.Write(pokemonsAscii);
         Console.ResetColor();
+
+        string spaces2 = @"                                ";
+        Console.Write(spaces2);
+        Console.Write($"{playerOnePokemonCurrentHP}/{FirstPokemonBaseHP}");
+        string spaces3 = @"                                                                                                                       ";
+        Console.Write(spaces3);
+        Console.Write($"{playerTwoPokemonCurrentHP}/{SecondPokemonBaseHP}");
+
         Console.WriteLine(@$"                                               
                                                                                             {Prompt}, {playerOnePokemon.ToUpper()}
             
@@ -155,20 +169,23 @@ class BagMenu
         }
     }
 
-    public int Run(string playerOnePokemon, string playerTwoPokemon, bool playerOne)
+
+
+    public int Run(string playerOnePokemon, string playerTwoPokemon, bool playerOne, int playerOnePokemonCurrentHP, int playerTwoPokemonCurrentHP)
     {
         ConsoleKeyInfo pressedKey;
 
         while (true)
         {
 
+
             if (playerOne)
             {
-                DisplayOptions(playerOnePokemon);
+                DisplayOptions(playerOnePokemon, playerOnePokemonCurrentHP, playerTwoPokemonCurrentHP);
             }
             else
             {
-                DisplayOptions(playerTwoPokemon);
+                DisplayOptions(playerTwoPokemon, playerOnePokemonCurrentHP, playerTwoPokemonCurrentHP);
             }
 
             pressedKey = Console.ReadKey();

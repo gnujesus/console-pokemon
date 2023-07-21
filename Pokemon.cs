@@ -20,18 +20,18 @@ class Pokemon
         EVs = evs;
         IVs = ivs;
         rnd = new Random();
-        Nature = rnd.Next(1, 13);
+        Nature = rnd.Next(3, 13);
         Type = type;
         inGameStats = new Dictionary<string, int> { };
 
-        inGameStats.Add("HP", 1);
-        inGameStats.Add("Attack", 1);
-        inGameStats.Add("Defense", 1);
-        inGameStats.Add("Sp. Attack", 1);
-        inGameStats.Add("Sp. Defense", 1);
-        inGameStats.Add("Speed", 1);
+        inGameStats.Add("HP", 100);
+        inGameStats.Add("Attack", rnd.Next(25, 50));
+        inGameStats.Add("Defense", rnd.Next(25, 50));
+        inGameStats.Add("Sp. Attack", rnd.Next(25, 50));
+        inGameStats.Add("Sp. Defense", rnd.Next(10, 25));
+        inGameStats.Add("Speed", rnd.Next(10, 31));
 
-        calculateInGameStats();
+        // calculateInGameStats();
     }
 
     public void calculateInGameStats()
@@ -40,14 +40,15 @@ class Pokemon
         {
             Console.WriteLine(value);
 
-            if (value == "HP")
-            {
-                inGameStats["HP"] = (((2 * BaseStats["HP"] + IVs["HP"] + (EVs["HP"] / 4) * Level)) / 100) + Level + 10;
-            }
-            else
-            {
-                inGameStats[value] = ((((2 * BaseStats[value] + IVs[value] + (EVs[value] / 4) * Level)) / 100) + 5) * Nature;
-            }
+            // if (value == "HP")
+            // {
+            //     inGameStats["HP"] = (((2 * BaseStats["HP"] + IVs["HP"] + (EVs["HP"] / 4) * Level)) / 100) + Level + 10;
+            // }
+            // else
+            // {
+            //     inGameStats[value] = ((((2 * BaseStats[value] + IVs[value] + (EVs[value] / 4) * Level)) / 100) + 5) * Nature;
+            // }
+
         }
     }
 

@@ -101,27 +101,9 @@ class Game
         CharizardMoveOptions = new string[] { "Ataque Ala", "Tajo Aereo", "Aranazo", "Enviste Igneo", "Onda Ignea", "Ascuas", "Garra Dragon", "Volver Atrás" };
         Options = new string[] { "Atacar", "Mochila", "Pokemon", "Huir" };
 
-        pikachuAttackMenu = new AttackMenu(PikachuMoveOptions, attackMenuPrompt);
-        charizardAttackMenu = new AttackMenu(CharizardMoveOptions, attackMenuPrompt);
-
-
-        PlayerOneBagOptions = PlayerOneBag.Items;
-        PlayerTwoBagOptions = PlayerOneBag.Items;
-        PlayerOneBagMenu = new BagMenu(PlayerOneBagOptions, Prompt);
-        PlayerTwoBagMenu = new BagMenu(PlayerTwoBagOptions, Prompt);
-        GameMenu = new FightMenu(Options, Prompt);
-
 
         Pikachu = new Pokemon("Pikachu", "Electric", 60, statistics(35, 55, 40, 50, 50, 90), individualValues(), effortValues(200, 40, 24, 136, 8, 148));
         Charizard = new Pokemon("Charizard", "Fire", 20, statistics(78, 84, 78, 109, 85, 100), individualValues(), effortValues(200, 30, 84, 112, 80, 32));
-
-        InfoMenuOptions = new string[] { "Volver Atrás" };
-        CharizardInfoMenuPrompt = Charizard.returnInfo();
-        PikachuInfoMenuPrompt = Pikachu.returnInfo();
-        PikachuInfoMenu = new InfoMenu(InfoMenuOptions, PikachuInfoMenuPrompt);
-        CharizardInfoMenu = new InfoMenu(InfoMenuOptions, CharizardInfoMenuPrompt);
-        cantFleeMenu = new CantFleeMenu(goBackOption, cantFleePrompt);
-
 
         PlayersPokemons = new Dictionary<string, Pokemon>();
         PlayersPokemons.Add("First Player Pokemon", Pikachu);
@@ -144,6 +126,27 @@ class Game
         CharizardMoves.Add("Onda Ignea", ondaIgnea);
         CharizardMoves.Add("Ascuas", ascuas);
         CharizardMoves.Add("Garra Dragon", garraDragon);
+
+        pikachuAttackMenu = new AttackMenu(PikachuMoveOptions, attackMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+        charizardAttackMenu = new AttackMenu(CharizardMoveOptions, attackMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+
+
+        PlayerOneBagOptions = PlayerOneBag.Items;
+        PlayerTwoBagOptions = PlayerOneBag.Items;
+        PlayerOneBagMenu = new BagMenu(PlayerOneBagOptions, Prompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+        PlayerTwoBagMenu = new BagMenu(PlayerTwoBagOptions, Prompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+        GameMenu = new FightMenu(Options, Prompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+
+
+
+        InfoMenuOptions = new string[] { "Volver Atrás" };
+        CharizardInfoMenuPrompt = Charizard.returnInfo();
+        PikachuInfoMenuPrompt = Pikachu.returnInfo();
+        PikachuInfoMenu = new InfoMenu(InfoMenuOptions, PikachuInfoMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+        CharizardInfoMenu = new InfoMenu(InfoMenuOptions, CharizardInfoMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+        cantFleeMenu = new CantFleeMenu(InfoMenuOptions, cantFleePrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+
+
 
     }
 
@@ -234,15 +237,19 @@ class Game
         }
     }
 
-    public void decreaseHP(int HP, int decrement, Pokemon attackedPokemon, string attackType)
+    public void decreaseHP(int decrement, Pokemon attackedPokemon, string attackType)
     {
         switch (attackedPokemon.Name)
         {
             case "Pikachu":
-                Pikachu.inGameStats["HP"] = HP - (decrement - (Pikachu.inGameStats["Defense"] / 2));
+                Pikachu.inGameStats["HP"] = Pikachu.inGameStats["HP"] - (decrement - (Pikachu.inGameStats["Defense"] / 2));
+                Console.WriteLine(Pikachu.inGameStats["HP"]);
+                Console.ReadLine();
                 break;
             case "Charizard":
-                Charizard.inGameStats["HP"] = HP - (decrement - (Pikachu.inGameStats["Defense"] / 2));
+                Charizard.inGameStats["HP"] = Charizard.inGameStats["HP"] - (decrement - (Charizard.inGameStats["Defense"] / 2));
+                Console.WriteLine(Charizard.inGameStats["HP"]);
+                Console.ReadLine();
                 break;
         }
     }
@@ -305,14 +312,54 @@ class Game
         return;
     }
 
+    static void AtaquePikachu()
+    {
+        string[] framesPikachu =
+        {
+                " \r\n                    MMMMM                           MMMMM                                                                                                  MM\r\n                    MMMMMMM    MMMMMMMMMMMMMMM    MMMMMMM                                                                                                 MMMM      M              MMMMMM\r\n                     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                 MMM,,,MM   MMM            MM,,,,,,MMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    MMM,,,MM   MMM            MM,,,,,,MMMM\r\n                          MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    MMM,,MMMMMMMMMMM            MMM,,,,,,,,,MMMM\r\n     NNNNNNNNN            MMM   MMMMMMMMMMMMM   MMM                                         ██╗   ██╗███████╗                                        MM,,,MMMMMMMMMMMMM            MM,,,,,,,,,,,,,MMMM\r\n      NNNNNNNNNNNNN      MMMM   MMMMMMMMMMMMM   MMMM                                        ██║   ██║██╔════╝                                        MM,,MMMMMMM  MMMMMM          MMM,,,,,,,,,,,,,,,,MMMM\r\n       NNNNNNNNNNNNNNNN MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                        ██║   ██║███████╗                                       MM,,,,MMMMM  MMMMMMMMM       MMM,,,,,,,,,,,,,,,,,,,,MMM\r\n        NNNNNNNNNNNNNNN MMM  MMMMMMMMMMMMMMMMMM  MMM                                        ╚██╗ ██╔╝╚════██║                                      MMM,,MMMMMMMMMMMMMMMMMMMM    MMM,,,,,,,,,,,,,,,,,,,,,,MMM\r\n                 NNNNNN  MM  MMMMMM       MMMMM  MMM                                         ╚████╔╝ ███████║                                      MM,,,MMMMMMMMMMMMMMMMMMMMMM  MM,,,,,,,,,,,,,,,,,,,,,,,,MMM\r\n                 NNNNNN   MMMMMMMMMMMMMMMMMMMMMMMMM                                           ╚═══╝  ╚══════╝                                       M,,,,,MMMMM     MMMMMMMMMMMMM,,,,,,,,,,,,,,,,,,,,,,,,,MM\r\n                NNNNNN    MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                  MM,,,          MMMMMMMMMMMMMMM,,,,    ,,MMMMM,,,    ,,MMM\r\n               NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                   MM,          MMMMMMMMMMMM MMMMM        MMMMMM        ,MM\r\n              NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    M         MMMMMMMMMMMMMM MMMMMM      MMMMMMM         M\r\n             NNNNNNN    MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                          MMMMMMMMMMMMMMMMMM MMMM MM   MMMMMMMM\r\n              NNNNNNNNNNMM MMMMM MMMMMMMMMMM MMMMM MM                                                                                                       MMMMMMMMMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                  NNNNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                     MMMMMM  MMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                    NNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                     MMMM   MMMMMMMMMMMMMM MMMMM MMMMMMMMMMM\r\n                       MMMMM M MMMMMMMMMMMMMMM M MMMM                                                                                                     MM   MMMMMMMMMMMMMMMMM M M MMMMMMMMM\r\n                       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                         MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                          MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMMM                                                                                                           MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMM                                                                                                             MMMMMMMMM            MMMMMMM\r\n                         MMMMMM               MMMMM                                                                                                         MMMMMMMMMMMM           MMMMMMMMM\r\n'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''",
+                "\r\n                    MMMM                              MMMMMM                                                                                               MM\r\n                     MMMMMMMMM     MMMMMMMMMMMM    MMMMMMM                                                                                                MMMM      M              MMMMMM\r\n                       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                 MMM,,,MM   MMM            MM,,,,,,MMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    MMM,,,MM   MMM            MM,,,,,,MMMM\r\n                            MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                  MMM,,MMMMMMMMMMM            MMM,,,,,,,,,MMMM\r\n                      MMMM  MMMM  MMMMMMMMMMMMMM  MMM                                       ██╗   ██╗███████╗                                        MM,,,MMMMMMMMMMMMM            MM,,,,,,,,,,,,,MMMM\r\n    NNNNNNNNN        MMMMM  MMMM   MMMMMMMMMMMM   MMM                                       ██║   ██║██╔════╝                                        MM,,MMMMMMM  MMMMMM          MMM,,,,,,,,,,,,,,,,MMMM\r\n     NNNNNNNNNNNNN   MMMMM MMMMMMMMMMMMMMMMMMMMMMMMMMM                                      ██║   ██║███████╗                                       MM,,,,MMMMM  MMMMMMMMM       MMM,,,,,,,,,,,,,,,,,,,,MMM\r\n      NNNNNNNNNNNNN  MMMMM MMMM  MMMMMMMMMMMMMMMMMM  MM                                     ╚██╗ ██╔╝╚════██║                                      MMM,,MMMMMMMMMMMMMMMMMMMM    MMM,,,,,,,,,,,,,,,,,,,,,,MMM\r\n       NNNNNNNNNNNNN  NNMMMMMMM  MMMMMM      MMMMMM  MM                                      ╚████╔╝ ███████║                                      MM,,,MMMMMMMMMMMMMMMMMMMMMM  MM,,,,,,,,,,,,,,,,,,,,,,,,MMM\r\n                NNNNN  NMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                        ╚═══╝  ╚══════╝                                       M,,,,,MMMMM     MMMMMMMMMMMMM,,,,,,,,,,,,,,,,,,,,,,,,,MM\r\n                NNNNNN  MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                          MM,,,          MMMMMMMMMMMMMMM,,,,    ,,MMMMM,,,    ,,MMM\r\n                NNNNNN   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                      MM,          MMMMMMMMMMMM MMMMM        MMMMMM        ,MM\r\n               NNNNNN      MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                        M         MMMMMMMMMMMMMM MMMMMM      MMMMMMM         M\r\n              NNNNNN       MMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                      MMMMMMMMMMMMMMMMMM MMMM MM   MMMMMMMM\r\n             NNNNNNN       MMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                        MMMMMMMMMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n             NNNNNNNNNNNN MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                      MMMMMM  MMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                 NNNNNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                     MMMM   MMMMMMMMMMMMMM MMMMM MMMMMMMMMMM\r\n                  NNNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                     MM   MMMMMMMMMMMMMMMMM M M MMMMMMMMM\r\n                   NNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                        MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                       NMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                      MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                      MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                         MMMMMMM                MMMMM                                                                                                         MMMMMMMMM            MMMMMMM\r\n                         MMM                     MMM                                                                                                        MMMMMMMMMMMM           MMMMMMMMM\r\n''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' ",
+                "\r\n              MMM                               MMMMM                                                                                                      MM\r\n              MMMMMM           MMMMMMMMMMMM   MMMMMM                                                                                                      MMMM      M              MMMMMM\r\n                MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                      MMM,,,MM   MMM            MM,,,,,,MMMM\r\n                 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                       MMM,,,MM   MMM            MM,,,,,,MMMM\r\n                     MMMMMMMM  MMMMMMMMMMMMMM  MMM                                                                                                    MMM,,MMMMMMMMMMM            MMM,,,,,,,,,MMMM\r\n                        MMMMM    MMMMMMMMMMM   MMMM                                         ██╗   ██╗███████╗                                        MM,,,MMMMMMMMMMMMM            MM,,,,,,,,,,,,,MMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMM   MMM                                   ██║   ██║██╔════╝                                        MM,,MMMMMMM  MMMMMM          MMM,,,,,,,,,,,,,,,,MMMM\r\n        NNNNNNNNNNNNNNN MMMMMMMMMMMMMMMMMMMMMMMM  MMMMMMM                                   ██║   ██║███████╗                                       MM,,,,MMMMM  MMMMMMMMM       MMM,,,,,,,,,,,,,,,,,,,,MMM\r\n         NNNNNNNNM M M MMMMM  MMMMMMMM     MMMMM  MMMMMMM                                   ╚██╗ ██╔╝╚════██║                                      MMM,,MMMMMMMMMMMMMMMMMMMM    MMM,,,,,,,,,,,,,,,,,,,,,,MMM\r\n          NNNNNNN MMMMM MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                     ╚████╔╝ ███████║                                      MM,,,MMMMMMMMMMMMMMMMMMMMMM  MM,,,,,,,,,,,,,,,,,,,,,,,,MMM\r\n           NNNNNNN NMMMM MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                       ╚═══╝  ╚══════╝                                       M,,,,,MMMMM     MMMMMMMMMMMMM,,,,,,,,,,,,,,,,,,,,,,,,,MM\r\n                  N MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                              MM,,,          MMMMMMMMMMMMMMM,,,,    ,,MMMMM,,,    ,,MMM\r\n                    N MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                MM,          MMMMMMMMMMMM MMMMM        MMMMMM        ,MM\r\n                     N MMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                   M         MMMMMMMMMMMMMM MMMMMM      MMMMMMM         M\r\n                    NNN MMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                           MMMMMMMMMMMMMMMMMM MMMM MM   MMMMMMMM\r\n                   NNNNN MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                 NNNNNNN MMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                      MMMMMM  MMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                  NNNNN MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                      MMMM   MMMMMMMMMMMMMM MMMMM MMMMMMMMMMM\r\n                     NN MM M M MMMMMMMMMMMMMMMMMMMMMM                                                                                                     MM   MMMMMMMMMMMMMMMMM M M MMMMMMMMM\r\n                       MMM MMMM MMMMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                        MMM MMMM MMMMMMMMMMMMMMMMMMMM                                                                                                        MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                         MMM MMM MMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                          MMM MM MM      MMMMMMMMMM                                                                                                          MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                             MMMM           MMMMMM                                                                                                            MMMMMMMMM            MMMMMMM\r\n                                             MMMM                                                                                                           MMMMMMMMMMMM           MMMMMMMMM\r\n''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' ",
+                "                                                                                                                                                          *               *                     \r\n                    MMMMM                           MMMMM                                                                                      *           MM    *                          \r\n                    MMMMMMM    MMMMMMMMMMMMMMM    MMMMMMM                                                                                                 MMMM      M              MMMMMM\r\n                     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                              *  MMM,,,MM   MMM            MM,,,,,,MMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    MMM,,,MM   MMM     *      MM,,,,,,MMMM\r\n                          MMMMMMMMMMMMMMMMMMMMMMMM                                                                                              *     MMM,,MMMMMMMMMMM            MMM,,,,,,,,,MMMM\r\n     NNNNNNNNN            MMM   MMMMMMMMMMMMM   MMM                                         ██╗   ██╗███████╗                                        MM,,,MMMMM    MMMM            MM,,,,,,,,,,,,,MMMM\r\n      NNNNNNNNNNNNN      MMMM   MMMMMMMMMMMMM   MMMM                                        ██║   ██║██╔════╝                                        MM,,MMMMMM  X MMMMM          MMM,,,,,,,,,,,,,,,,MMMM\r\n       NNNNNNNNNNNNNNNN MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                        ██║   ██║███████╗                                       MM,,,,MMMM XX MMMMMMMM       MMM,,,,,,,,,,,,,,,,,,,,MMM\r\n        NNNNNNNNNNNNNNN MMM  MMMMMMMMMMMMMMMMMM  MMM                                        ╚██╗ ██╔╝╚════██║                                      MMM,,MMMMMM    MMMMMMMMMM    MMM,,,,,,,,,,,,,,,,,,,,,,MMM\r\n                 NNNNNN  MM  MMMMMM       MMMMM  MMM                                         ╚████╔╝ ███████║                                      MM,,,MMMMMMMMMMMMMMMMMMMMMM  MM,,,,,,,,,,,,,,,,,,,,,,,,MMM\r\n                 NNNNNN   MMMMMMMMMMMMMMMMMMMMMMMMM                                           ╚═══╝  ╚══════╝                                       M,,,,,MMMMM     MMMMMMMMMMMMM,,,,,,,,,,,,,,,,,,,,,,,,,MM\r\n                NNNNNN    MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                  MM,,,          MMMMMMMMMMMMMMM,,,,    ,,MMMMM,,,    ,,MMM\r\n               NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                   MM,          MMMMMMMMMMMM MMMMM        MMMMMM        ,MM\r\n              NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    M         MMMMMMMMMMMMMM MMMMMM      MMMMMMM         M\r\n             NNNNNNN    MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                          MMMMMMMMMMMMMMMMMM MMMM MM   MMMMMMMM\r\n              NNNNNNNNNNMM MMMMM MMMMMMMMMMM MMMMM MM                                                                                                       MMMMMMMMMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                  NNNNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                     MMMMMM  MMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                    NNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                     MMMM   MMMMMMMMMMMMMM MMMMM MMMMMMMMMMM\r\n                       MMMMM M MMMMMMMMMMMMMMM M MMMM                                                                                                     MM   MMMMMMMMMMMMMMMMM M M MMMMMMMMM\r\n                       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                         MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                          MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMMM                                                                                                           MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMM                                                                                                             MMMMMMMMM            MMMMMMM\r\n                         MMMMMM               MMMMM                                                                                                         MMMMMMMMMMMM           MMMMMMMMM\r\n'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''",
+                "                                                                                                                                                          *               *                     \r\n                    MMMMM                           MMMMM                                                                                      *           MM    *                          \r\n                    MMMMMMM    MMMMMMMMMMMMMMM    MMMMMMM                                                                                                 MMMM      M              MMMMMM\r\n                     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                              *  MMM,,,MM   MMM            MM,,,,,,MMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    MMM,,,MM   MMM     *      MM,,,,,,MMMM\r\n                          MMMMMMMMMMMMMMMMMMMMMMMM                                                                                              *     MMM,,MMMMMMMMMMM            MMM,,,,,,,,,MMMM\r\n     NNNNNNNNN            MMM   MMMMMMMMMMMMM   MMM                                         ██╗   ██╗███████╗                                        MM,,,MMMMM    MMMM            MM,,,,,,,,,,,,,MMMM\r\n      NNNNNNNNNNNNN      MMMM   MMMMMMMMMMMMM   MMMM                                        ██║   ██║██╔════╝                                        MM,,MMMMMM  X MMMMM          MMM,,,,,,,,,,,,,,,,MMMM\r\n       NNNNNNNNNNNNNNNN MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                        ██║   ██║███████╗                                       MM,,,,MMMM XX MMMMMMMM       MMM,,,,,,,,,,,,,,,,,,,,MMM\r\n        NNNNNNNNNNNNNNN MMM  MMMMMMMMMMMMMMMMMM  MMM                                        ╚██╗ ██╔╝╚════██║                                      MMM,,MMMMMM    MMMMMMMMMM    MMM,,,,,,,,,,,,,,,,,,,,,,MMM\r\n                 NNNNNN  MM  MMMMMM       MMMMM  MMM                                         ╚████╔╝ ███████║                                      MM,,,MMMMMMMMMMMMMMMMMMMMMM  MM,,,,,,,,,,,,,,,,,,,,,,,,MMM\r\n                 NNNNNN   MMMMMMMMMMMMMMMMMMMMMMMMM                                           ╚═══╝  ╚══════╝                                       M,,,,,MMMMM     MMMMMMMMMMMMM,,,,,,,,,,,,,,,,,,,,,,,,,MM\r\n                NNNNNN    MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                  MM,,,          MMMMMMMMMMMMMMM,,,,    ,,MMMMM,,,    ,,MMM\r\n               NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                   MM,          MMMMMMMMMMMM MMMMM        MMMMMM        ,MM\r\n              NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    M         MMMMMMMMMMMMMM MMMMMM      MMMMMMM         M\r\n             NNNNNNN    MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                          MMMMMMMMMMMMMMMMMM MMMM MM   MMMMMMMM\r\n              NNNNNNNNNNMM MMMMM MMMMMMMMMMM MMMMM MM                                                                                                       MMMMMMMMMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                  NNNNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                     MMMMMM  MMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                    NNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                     MMMM   MMMMMMMMMMMMMM MMMMM MMMMMMMMMMM\r\n                       MMMMM M MMMMMMMMMMMMMMM M MMMM                                                                                                     MM   MMMMMMMMMMMMMMMMM M M MMMMMMMMM\r\n                       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                         MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                          MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMMM                                                                                                           MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMM                                                                                                             MMMMMMMMM            MMMMMMM\r\n                         MMMMMM               MMMMM                                                                                                         MMMMMMMMMMMM           MMMMMMMMM\r\n'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''"
+            };
+
+        for (int j = 0; j < framesPikachu.Length; j++)
+        {
+            Thread.Sleep(700);
+            Console.Clear();
+            Console.WriteLine(framesPikachu[j]);
+        };
+        Console.Clear();
+    }
+
+    static void AtaqueCharizard()
+    {
+        string[] frameCharizard =
+        {
+                " \r\n                    MMMMM                           MMMMM                                                                                                  MM\r\n                    MMMMMMM    MMMMMMMMMMMMMMM    MMMMMMM                                                                                                 MMMM      M              MMMMMM\r\n                     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                 MMM,,,MM   MMM            MM,,,,,,MMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    MMM,,,MM   MMM            MM,,,,,,MMMM\r\n                          MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    MMM,,MMMMMMMMMMM            MMM,,,,,,,,,MMMM\r\n     NNNNNNNNN            MMM   MMMMMMMMMMMMM   MMM                                         ██╗   ██╗███████╗                                        MM,,,MMMMMMMMMMMMM            MM,,,,,,,,,,,,,MMMM\r\n      NNNNNNNNNNNNN      MMMM   MMMMMMMMMMMMM   MMMM                                        ██║   ██║██╔════╝                                        MM,,MMMMMMM  MMMMMM          MMM,,,,,,,,,,,,,,,,MMMM\r\n       NNNNNNNNNNNNNNNN MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                        ██║   ██║███████╗                                       MM,,,,MMMMM  MMMMMMMMM       MMM,,,,,,,,,,,,,,,,,,,,MMM\r\n        NNNNNNNNNNNNNNN MMM  MMMMMMMMMMMMMMMMMM  MMM                                        ╚██╗ ██╔╝╚════██║                                      MMM,,MMMMMMMMMMMMMMMMMMMM    MMM,,,,,,,,,,,,,,,,,,,,,,MMM\r\n                 NNNNNN  MM  MMMMMM       MMMMM  MMM                                         ╚████╔╝ ███████║                                      MM,,,MMMMMMMMMMMMMMMMMMMMMM  MM,,,,,,,,,,,,,,,,,,,,,,,,MMM\r\n                 NNNNNN   MMMMMMMMMMMMMMMMMMMMMMMMM                                           ╚═══╝  ╚══════╝                                       M,,,,,MMMMM     MMMMMMMMMMMMM,,,,,,,,,,,,,,,,,,,,,,,,,MM\r\n                NNNNNN    MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                  MM,,,          MMMMMMMMMMMMMMM,,,,    ,,MMMMM,,,    ,,MMM\r\n               NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                   MM,          MMMMMMMMMMMM MMMMM        MMMMMM        ,MM\r\n              NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    M         MMMMMMMMMMMMMM MMMMMM      MMMMMMM         M\r\n             NNNNNNN    MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                          MMMMMMMMMMMMMMMMMM MMMM MM   MMMMMMMM\r\n              NNNNNNNNNNMM MMMMM MMMMMMMMMMM MMMMM MM                                                                                                       MMMMMMMMMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                  NNNNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                     MMMMMM  MMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                    NNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                     MMMM   MMMMMMMMMMMMMM MMMMM MMMMMMMMMMM\r\n                       MMMMM M MMMMMMMMMMMMMMM M MMMM                                                                                                     MM   MMMMMMMMMMMMMMMMM M M MMMMMMMMM\r\n                       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                         MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                          MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMMM                                                                                                           MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMM                                                                                                             MMMMMMMMM            MMMMMMM\r\n                         MMMMMM               MMMMM                                                                                                         MMMMMMMMMMMM           MMMMMMMMM\r\n'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''",
+                "\r\n                    MMMMM                           MMMMM                                                                                                             M    M         MMMM   \r\n                    MMMMMMM    MMMMMMMMMMMMMMM    MMMMMMM                                                                                                            MM   MMM          MM,MM\r\n                     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                          M  MMMMMMMMM           MM,,MM \r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                            MM MMMM   MMMM          MM,,,,MM   \r\n                          MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                           MM,MMMMMM   MMMMM          MMM,,,,,MM\r\n     NNNNNNNNN            MMM   MMMMMMMMMMMMM   MMM                                         ██╗   ██╗███████╗                                              MM,,,MMMMMMMMMMMMMMM         MM,,,,,,,MMM \r\n      NNNNNNNNNNNNN      MMMM   MMMMMMMMMMMMM   MMMM                                        ██║   ██║██╔════╝                                            MMM,,,,MMMMMMMMMMMMMMM       MMMM,,,,,,,,,MMM \r\n       NNNNNNNNNNNNNNNN MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                        ██║   ██║███████╗                                          MMMM,,,,,MM      MMMMMMMMM  MMMMMM,,,,,,,,,,,,,MMM\r\n        NNNNNNNNNNNNNNN MMM  MMMMMMMMMMMMMMMMMM  MMM                                        ╚██╗ ██╔╝╚════██║                                        MMMM,,,,,,,    MMM MMMMMMMMMMMMMMMM,,,,,,,,,,,,,,,MMM\r\n                 NNNNNN  MM  MMMMMM       MMMMM  MMM                                         ╚████╔╝ ███████║                                       MMM,,,,,,,,    MM    MMMMMMMMMMMMMM,,,,MM,,,,,,,,,,,,MMM\r\n                 NNNNNN   MMMMMMMMMMMMMMMMMMMMMMMMM                                           ╚═══╝  ╚══════╝                                      MMM,,,,,MMMM       MMMMMMMMMMMMMMMM,,,,MMMM,,,,,,,,,,,,MM\r\n                NNNNNN    MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                MMM,,,,,MM  MMMM   MMMMMMMMMMMMMMMMMMMMMMMM,,,,,,   ,,,,MM\r\n               NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                M,,         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM  MMMMM     ,MM\r\n              NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                               M,              MMMMMMMMMMMMMMMMMMMMMMMMM    MMMMMM     M\r\n             NNNNNNN    MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                                MMMMMMMMMMMMMMMMMMMMM      MMMMMMM     \r\n              NNNNNNNNNNMM MMMMM MMMMMMMMMMM MMMMM MM                                                                                                              MMMMMMMMMMMMMMMMMMMMMMM    MMMMMMMM    \r\n                  NNNNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                              MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM \r\n                    NNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                              MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM \r\n                       MMMMM M MMMMMMMMMMMMMMM M MMMM                                                                                                            MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM  \r\n                       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                           MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM \r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                           MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM    \r\n                         MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                            MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM \r\n                           MMMMMMMMMMMMMMMMMMMMMMM                                                                                                              MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMM                                                                                                               MMMMMMMMM                MMMMMM  \r\n                         MMMMMM               MMMMM                                                                                                            MMMMMMMMM                 MMMMMMM \r\n'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''",
+                "\r\n                    MMMMM                           MMMMM                                                                                                             MMM                MMMM \r\n                    MMMMMMM    MMMMMMMMMMMMMMM    MMMMMMM                                                                                                        MMMMMMM                  M,,,MM\r\n                     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                      MMMM,,,,,MM                  MM,,,,MMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                       MMM,,,,,,,,MM  M                M,,,,,,MMMM\r\n                          MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                       MM,,,,,,,,MM,,MMMM                MMM,,,,,,,,MM\r\n     NNNNNNNNN            MMM   MMMMMMMMMMMMM   MMM                                         ██╗   ██╗███████╗                                          MMM,,,,,,,MMMMMMMMM                 MM,,,,,,,,,,,MM\r\n      NNNNNNNNNNNNN      MMMM   MMMMMMMMMMMMM   MMMM                                        ██║   ██║██╔════╝                                         MM,,,,,,,, MMMMM  MMMMMM             MMM,,,,,,,,,,,MM\r\n       NNNNNNNNNNNNNNNN MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                        ██║   ██║███████╗                                        MM,,,,,,,,M MMMM   MMMMMMNMMM        MMMM,,,,,,,,,,,,MM\r\n        NNNNNNNNNNNNNNN MMM  MMMMMMMMMMMMMMMMMM  MMM                                        ╚██╗ ██╔╝╚════██║                                       MM,,,,,,,,,MMMMMMMMMMMMMMMMMMMMM    MMMMMM,,,,,,,,,,,,,MM\r\n                 NNNNNN  MM  MMMMMM       MMMMM  MMM                                         ╚████╔╝ ███████║                                      MM,,,,,,,,,MMMMMM.MMMMMMMMMMMMMMMMMMMMMMMMM,,,,,,,,,,,,,,MM\r\n                 NNNNNN   MMMMMMMMMMMMMMMMMMMMMMMMM                                           ╚═══╝  ╚══════╝                                     MMM,,,,,,,,M'  ...MM  MMMMMMMMMMM MMMMMM,,,,,,,,,,,,,,,,,,,MM\r\n                NNNNNN    MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                MM,,,,,,,    .MMMMM    MMMMMMMMMM MMMMMM,,,,,,,,,,,,,,,,,,,MM\r\n               NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                MM,,,,                MMMMMMMMMMMM MMM MM,,,,,,,,,,,,,,,,,,,M\r\n              NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                M,,       MMMMM    MMMMMMMMMMMMMM MM MMMMM,,     ,, MMMM ,,M\r\n             NNNNNNN    MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                               M,        MM MMMMMMMMMMMMMMM MMM MM MMMMMM         MMMMMM\r\n              NNNNNNNNNNMM MMMMM MMMMMMMMMMM MMMMM MM                                                                                                             MMMMM  MMMMM MMM MM MMMMMMMM       MMMMMMMM\r\n                  NNNNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                                  MMMMMMMMMMMMMMMMMMMMMMMMM    MMMMMMMMMM\r\n                    NNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                                MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                       MMMMM M MMMMMMMMMMMMMMM M MMMM                                                                                                               MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                              MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                               MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                         MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                                 MMMMMMMMMMM       MMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMMM                                                                                                                  MMMMMMMMM           MMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMM                                                                                                                    MMMMMMMM            MMMMMMMM\r\n                         MMMMMM               MMMMM                                                                                                                 MMMMMMMM             MMMMMMM\r\n'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''",
+                "\r\n             *      MMMMM   *           *       *   MMMMM                                                                                                             MMM                MMMM \r\n                    MMMMMMM    MMMMMMMMMMMMMMM    MMMMMMM    *                                                                                                   MMMMMMM                  M,,,MM\r\n               *  *  MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM *                                                                                                    MMMM,,,,,MM                  MM,,,,MMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM       *                                                                                               MMM,,,,,,,,MM  M                M,,,,,,MMMM\r\n                          MM     MMMMMMMMMMM     M     *                                                                                                 MM,,,,,,,,MM,,MMMM                MMM,,,,,,,,MM\r\n     NNNNNNNNN            MM   X MMMMMMMMMMM X   MM                                         ██╗   ██╗███████╗                                          MMM,,,,,,,MMMMMMMMM                 MM,,,,,,,,,,,MM\r\n      NNNNNNNNNNNNN      MMM X   MMMMMMMMMMM   X MMM                                        ██║   ██║██╔════╝                                         MM,,,,,,,, MMMMM  MMMMMM             MMM,,,,,,,,,,,MM\r\n       NNNNNNNNNNNNNNNN MMMM     MMMMMMMMMMM     MMM                                        ██║   ██║███████╗                                        MM,,,,,,,,M MMMM   MMMMMMNMMM        MMMM,,,,,,,,,,,,MM\r\n        NNNNNNNNNNNNNNN MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                        ╚██╗ ██╔╝╚════██║                                       MM,,,,,,,,,MMMMMMMMMMMMMMMMMMMMM    MMMMMM,,,,,,,,,,,,,MM\r\n                 NNNNNN  MM  MMMMMM       MMMMM  MMM                                         ╚████╔╝ ███████║                                      MM,,,,,,,,,MMMMMM.MMMMMMMMMMMMMMMMMMMMMMMMM,,,,,,,,,,,,,,MM\r\n                 NNNNNN   MMMMMMMMMMMMMMMMMMMMMMMMM                                           ╚═══╝  ╚══════╝                                     MMM,,,,,,,,M'  ...MM  MMMMMMMMMMM MMMMMM,,,,,,,,,,,,,,,,,,,MM\r\n                NNNNNN    MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                MM,,,,,,,    .MMMMM    MMMMMMMMMM MMMMMM,,,,,,,,,,,,,,,,,,,MM\r\n               NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                MM,,,,                MMMMMMMMMMMM MMM MM,,,,,,,,,,,,,,,,,,,M\r\n              NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                M,,       MMMMM    MMMMMMMMMMMMMM MM MMMMM,,     ,, MMMM ,,M\r\n             NNNNNNN    MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                               M,        MM MMMMMMMMMMMMMMM MMM MM MMMMMM         MMMMMM\r\n              NNNNNNNNNNMM MMMMM MMMMMMMMMMM MMMMM MM                                                                                                             MMMMM  MMMMM MMM MM MMMMMMMM       MMMMMMMM\r\n                  NNNNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                                  MMMMMMMMMMMMMMMMMMMMMMMMM    MMMMMMMMMM\r\n                    NNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                                MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                       MMMMM M MMMMMMMMMMMMMMM M MMMM                                                                                                               MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                              MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                               MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                         MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                                 MMMMMMMMMMM       MMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMMM                                                                                                                  MMMMMMMMM           MMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMM                                                                                                                    MMMMMMMM            MMMMMMMM\r\n                         MMMMMM               MMMMM                                                                                                                 MMMMMMMM             MMMMMMM\r\n'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''",
+                "                      *                                 *\r\n            *       MMMMM    *       *          *   MMMMM                                                                                                  MM\r\n                    MMMMMMM    MMMMMMMMMMMMMMM    MMMMMMM                                                                                                 MMMM      M              MMMMMM\r\n                     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM     *                                                                                           MMM,,,MM   MMM            MM,,,,,,MMMM\r\n                *       MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    MMM,,,MM   MMM            MM,,,,,,MMMM\r\n                      *   MM     MMMMMMMMMMM     M    *     *                                                                                         MMM,,MMMMMMMMMMM            MMM,,,,,,,,,MMMM\r\n     NNNNNNNNN            MM XXX MMMMMMMMMMM XXX MM                                         ██╗   ██╗███████╗                                        MM,,,MMMMMMMMMMMMM            MM,,,,,,,,,,,,,MMMM\r\n      NNNNNNNNNNNNN      MMM XXX MMMMMMMMMMM XXX MMM                                        ██║   ██║██╔════╝                                        MM,,MMMMMMM  MMMMMM          MMM,,,,,,,,,,,,,,,,MMMM\r\n       NNNNNNNNNNNNNNNN MMMM     MMMMMMMMMMM     MMM                                        ██║   ██║███████╗                                       MM,,,,MMMMM  MMMMMMMMM       MMM,,,,,,,,,,,,,,,,,,,,MMM\r\n        NNNNNNNNNNNNNNN MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                        ╚██╗ ██╔╝╚════██║                                      MMM,,MMMMMMMMMMMMMMMMMMMM    MMM,,,,,,,,,,,,,,,,,,,,,,MMM\r\n                 NNNNNN  MM  MMMMMM       MMMMM  MMM                                         ╚████╔╝ ███████║                                      MM,,,MMMMMMMMMMMMMMMMMMMMMM  MM,,,,,,,,,,,,,,,,,,,,,,,,MMM\r\n                 NNNNNN   MMMMMMMMMMMMMMMMMMMMMMMMM                                           ╚═══╝  ╚══════╝                                       M,,,,,MMMMM     MMMMMMMMMMMMM,,,,,,,,,,,,,,,,,,,,,,,,,MM\r\n                NNNNNN    MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                  MM,,,          MMMMMMMMMMMMMMM,,,,    ,,MMMMM,,,    ,,MMM\r\n               NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMM                                                                                                   MM,          MMMMMMMMMMMM MMMMM        MMMMMM        ,MM\r\n              NNNNNN     MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                    M         MMMMMMMMMMMMMM MMMMMM      MMMMMMM         M\r\n             NNNNNNN    MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                          MMMMMMMMMMMMMMMMMM MMMM MM   MMMMMMMM\r\n              NNNNNNNNNNMM MMMMM MMMMMMMMMMM MMMMM MM                                                                                                       MMMMMMMMMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                  NNNNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                     MMMMMM  MMMMMMMMMMMMMM MMMM MMMMMMMMMMMM\r\n                    NNNNMMM MMM MMMMMMMMMMMMM MMM MMM                                                                                                     MMMM   MMMMMMMMMMMMMM MMMMM MMMMMMMMMMM\r\n                       MMMMM M MMMMMMMMMMMMMMM M MMMM                                                                                                     MM   MMMMMMMMMMMMMMMMM M M MMMMMMMMM\r\n                       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                        MMMMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                         MMMMMMMMMMMMMMMMMMMMMMMMMM                                                                                                          MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMMM                                                                                                           MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n                           MMMMMMMMMMMMMMMMMMMMMM                                                                                                             MMMMMMMMM            MMMMMMM\r\n                         MMMMMM               MMMMM                                                                                                         MMMMMMMMMMMM           MMMMMMMMM\r\n'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''"
+                };
+
+        for (int j = 0; j < frameCharizard.Length; j++)
+        {
+            Thread.Sleep(700);
+            Console.Clear();
+            Console.WriteLine(frameCharizard[j]);
+        };
+        Console.Clear();
+    }
+
     public void Run(string playerOnePokemon, string playerTwoPokemon)
     {
         bool running = true;
         bool playerOne = true;
 
-        while (running && PlayersPokemons["First Player Pokemon"].inGameStats["HP"] != 0 && PlayersPokemons["Second Player Pokemon"].inGameStats["HP"] != 0)
+        while (running && PlayersPokemons["First Player Pokemon"].inGameStats["HP"] > 0 && PlayersPokemons["Second Player Pokemon"].inGameStats["HP"] > 0)
         {
-            switch (GameMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
+            switch (GameMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
             {
                 case 0:
                     if (playerOne)
@@ -320,55 +367,78 @@ class Game
                         switch (playerOnePokemon)
                         {
                             case "Pikachu":
-                                switch (pikachuAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
+                                switch (pikachuAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
                                 {
                                     case 0:
+                                        AtaquePikachu();
+                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, latigo.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 1:
+                                        AtaquePikachu();
+                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, ataqueRapido.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 2:
+                                        AtaquePikachu();
+                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, impactrueno.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 3:
+                                        AtaquePikachu();
+                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, bolaVoltio.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 4:
+                                        AtaquePikachu();
+                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, ondaTrueno.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 5:
+                                        AtaquePikachu();
+                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, amago.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 6:
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 7:
                                         break;
                                 }
                                 break;
                             case "Charizard":
-                                switch (charizardAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
+                                switch (charizardAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
                                 {
                                     case 0:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, ataqueAla.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 1:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, tajoAereo.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 2:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, aranazo.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 3:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, envisteIgneo.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 4:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, ondaIgnea.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 5:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, ascuas.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 6:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, garraDragon.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 7:
@@ -379,58 +449,82 @@ class Game
                     }
                     else
                     {
+
                         switch (playerTwoPokemon)
                         {
                             case "Pikachu":
-                                switch (pikachuAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
+                                switch (pikachuAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
                                 {
                                     case 0:
+                                        AtaquePikachu();
+                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, latigo.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 1:
+                                        AtaquePikachu();
+                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, ataqueRapido.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 2:
+                                        AtaquePikachu();
+                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, impactrueno.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 3:
+                                        AtaquePikachu();
+                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, bolaVoltio.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 4:
+                                        AtaquePikachu();
+                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, ondaTrueno.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 5:
+                                        AtaquePikachu();
+                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, amago.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 6:
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 7:
                                         break;
                                 }
                                 break;
                             case "Charizard":
-                                switch (charizardAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
+                                switch (charizardAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
                                 {
                                     case 0:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, ataqueAla.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 1:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, tajoAereo.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 2:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, aranazo.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 3:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, envisteIgneo.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 4:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, ondaIgnea.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 5:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, ascuas.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 6:
+                                        AtaqueCharizard();
+                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, garraDragon.MoveType);
                                         playerOne = !playerOne;
                                         break;
                                     case 7:
@@ -446,7 +540,7 @@ class Game
                     if (playerOne)
                     {
 
-                        switch (PlayerOneBagMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne))
+                        switch (PlayerOneBagMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
                         {
                             case 0:
                                 itemsFunctionality(PlayerOneBagMenu.Options[0], playerOnePokemon, playerTwoPokemon);
@@ -475,7 +569,7 @@ class Game
                     }
                     else
                     {
-                        switch (PlayerTwoBagMenu.Run(playerTwoPokemon, playerTwoPokemon, playerOne))
+                        switch (PlayerTwoBagMenu.Run(playerTwoPokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
                         {
                             case 0:
                                 break;
@@ -510,12 +604,12 @@ class Game
                         {
                             case "Pikachu":
 
-                                PikachuInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne);
+                                PikachuInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
                                 break;
 
                             case "Charizard":
 
-                                CharizardInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne);
+                                CharizardInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
                                 break;
                         }
                     }
@@ -524,20 +618,33 @@ class Game
                         switch (playerTwoPokemon)
                         {
                             case "Pikachu":
-                                PikachuInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne);
+                                PikachuInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
                                 break;
                             case "Charizard":
-                                CharizardInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne);
+                                CharizardInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
                                 break;
                         }
                     }
                     break;
                 case 3:
-                    cantFleeMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne);
+                    cantFleeMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
                     break;
 
             }
         }
+        Console.WriteLine("                                                                                                GAME OVER!");
+        if (PlayersPokemons["First Player Pokemon"].inGameStats["HP"] > PlayersPokemons["Second Player Pokemon"].inGameStats["HP"])
+        {
+            Console.WriteLine($"                                                                                            {PlayersPokemons["First Player Pokemon"].Name} HA GANADO!");
+        }
+        else
+        {
+
+            Console.WriteLine($"                                                                                            {PlayersPokemons["Second Player Pokemon"].Name} HA GANADO!");
+        }
+
+        Console.ReadLine();
+        return;
     }
 
 }

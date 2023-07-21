@@ -1,8 +1,8 @@
 class Move
 {
     private string Name;
-    private Types Type;
-    private string MoveType;
+    public Types Type;
+    public string MoveType;
 
 
     public Move(string name, string moveType)
