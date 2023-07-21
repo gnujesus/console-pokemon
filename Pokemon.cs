@@ -10,6 +10,7 @@ class Pokemon
     private int Nature;
     private Random rnd;
     private string Type;
+    public int BaseHP;
 
 
     public Pokemon(string name, string type, int level, Dictionary<string, int> stats, Dictionary<string, int> ivs, Dictionary<string, int> evs)
@@ -23,6 +24,7 @@ class Pokemon
         Nature = rnd.Next(3, 13);
         Type = type;
         inGameStats = new Dictionary<string, int> { };
+        BaseHP = 100;
 
         inGameStats.Add("HP", 100);
         inGameStats.Add("Attack", rnd.Next(25, 50));

@@ -9,7 +9,7 @@ class FightMenu
     private string pokemonsAscii;
     private int FirstPlayerHP;
     private string SecondPlayerHP;
-    private int FirstPokemonBaseHP;
+    public int FirstPokemonBaseHP;
     private int SecondPokemonBaseHP;
 
     public FightMenu(string[] options, string prompt, int firstPokemonBaseHP, int secondPokemonBaseHP)
