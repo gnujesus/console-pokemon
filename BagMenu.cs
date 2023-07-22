@@ -178,8 +178,7 @@ class BagMenu
         while (true)
         {
 
-
-            if (playerOne)
+            if (playerOne == true)
             {
                 DisplayOptions(playerOnePokemon, playerOnePokemonCurrentHP, playerTwoPokemonCurrentHP);
             }
@@ -200,8 +199,6 @@ class BagMenu
         }
 
     }
-
-
 
 
     private void ResetVariables()
