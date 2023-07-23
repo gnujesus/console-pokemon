@@ -1,4 +1,4 @@
-class CantFleeMenu
+class CantFleeMenu2
 {
     private int SelectedIndex;
     private string[] Options;
@@ -11,7 +11,7 @@ class CantFleeMenu
     private int FirstPokemonBaseHP;
     private int SecondPokemonBaseHP;
 
-    public CantFleeMenu(string[] options, string prompt, int firstPokemonBaseHP, int secondPokemonBaseHP)
+    public CantFleeMenu2(string[] options, string prompt, int firstPokemonBaseHP, int secondPokemonBaseHP)
     {
         Console.CursorVisible = false;
 

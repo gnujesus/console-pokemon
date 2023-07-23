@@ -6,9 +6,9 @@ class Game
     private BagMenu PlayerTwoBagMenu;
     private InfoMenu PikachuInfoMenu;
     private InfoMenu CharizardInfoMenu;
-    private CantFleeMenu cantFleeMenu;
-    private AttackMenu pikachuAttackMenu;
-    private AttackMenu charizardAttackMenu;
+    private CantFleeMenu CantFleeMenu;
+    private AttackMenu PikachuAttackMenu;
+    private AttackMenu CharizardAttackMenu;
     private string Prompt;
     private string[] Options;
     private string[] PlayerOneBagOptions;
@@ -85,7 +85,6 @@ class Game
 
 
 
-
     public Game()
     {
         ItemsFile = @"assets/items.txt";
@@ -128,8 +127,8 @@ class Game
         CharizardMoves.Add("Ascuas", ascuas);
         CharizardMoves.Add("Garra Dragon", garraDragon);
 
-        pikachuAttackMenu = new AttackMenu(PikachuMoveOptions, attackMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
-        charizardAttackMenu = new AttackMenu(CharizardMoveOptions, attackMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+        PikachuAttackMenu = new AttackMenu(PikachuMoveOptions, attackMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+        CharizardAttackMenu = new AttackMenu(CharizardMoveOptions, attackMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
 
 
         PlayerOneBagOptions = PlayerOneBag.Items;
@@ -145,7 +144,7 @@ class Game
         PikachuInfoMenuPrompt = Pikachu.returnInfo();
         PikachuInfoMenu = new InfoMenu(InfoMenuOptions, PikachuInfoMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
         CharizardInfoMenu = new InfoMenu(InfoMenuOptions, CharizardInfoMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
-        cantFleeMenu = new CantFleeMenu(InfoMenuOptions, cantFleePrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+        CantFleeMenu = new CantFleeMenu(InfoMenuOptions, cantFleePrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
 
         Spaces = "                                                           ";
 
@@ -240,7 +239,7 @@ class Game
         }
     }
 
-    public void decreaseHP(int decrement, Pokemon attackedPokemon, string attackType)
+    public void decreaseHP(int decrement, Pokemon attackedPokemon)
     {
         switch (attackedPokemon.Name)
         {
@@ -516,7 +515,7 @@ class Game
         return;
     }
 
-    static void AtaquePikachu()
+    public void AtaquePikachu()
     {
         string[] framesPikachu =
         {
@@ -541,7 +540,7 @@ class Game
         Console.ReadLine();
         Console.Clear();
     }
-    static void AtaqueCharizard()
+    public void AtaqueCharizard()
     {
         string[] frameCharizard =
         {
@@ -568,384 +567,297 @@ class Game
         Console.Clear();
     }
 
-
-    public void Run(string playerOnePokemon, string playerTwoPokemon)
+    public void UseAttack(Pokemon attackingPokemon, Pokemon attackedPokemon, Move move)
     {
-        bool running = true;
-        bool playerOne = true;
-
-        while (running && PlayersPokemons["First Player Pokemon"].inGameStats["HP"] > 0 && PlayersPokemons["Second Player Pokemon"].inGameStats["HP"] > 0)
+        Console.WriteLine(@$"
+                                {Spaces}{attackingPokemon.Name.ToUpper()}, USA {move.Name.ToUpper()}!");
+        Thread.Sleep(2000);
+        switch (attackingPokemon.Name)
         {
-            switch (GameMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
+            case "Pikachu":
+                AtaquePikachu();
+                break;
+            case "Charizard":
+                AtaqueCharizard();
+                break;
+        }
+        decreaseHP(attackingPokemon.inGameStats["Attack"], attackedPokemon);
+    }
+
+
+
+
+    public bool RunAttackMenu(string playerOnePokemon, string playerTwoPokemon, bool playerOne, int playerOnePokemonCurrentHP, int playerTwoPokemonCurrentHP)
+    {
+        bool PlayerOne = playerOne;
+        if (playerOne)
+        {
+            switch (playerOnePokemon)
+            {
+                case "Pikachu":
+                    switch (PikachuAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
+                    {
+                        case 0:
+                            UseAttack(Pikachu, Charizard, latigo);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 1:
+                            UseAttack(Pikachu, Charizard, ataqueRapido);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 2:
+                            UseAttack(Pikachu, Charizard, impactrueno);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 3:
+                            UseAttack(Pikachu, Charizard, bolaVoltio);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 4:
+                            UseAttack(Pikachu, Charizard, ondaTrueno);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 5:
+                            UseAttack(Pikachu, Charizard, amago);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 6:
+                            break;
+                    }
+                    return PlayerOne;
+                case "Charizard":
+                    switch (CharizardAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
+                    {
+                        case 0:
+                            UseAttack(Charizard, Pikachu, ataqueAla);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 1:
+                            UseAttack(Charizard, Pikachu, tajoAereo);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 2:
+                            UseAttack(Charizard, Pikachu, aranazo);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 3:
+                            UseAttack(Charizard, Pikachu, envisteIgneo);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 4:
+                            UseAttack(Charizard, Pikachu, ondaIgnea);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 5:
+                            UseAttack(Charizard, Pikachu, ascuas);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 6:
+                            UseAttack(Charizard, Pikachu, garraDragon);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 7:
+                            break;
+                    }
+                    return PlayerOne;
+            }
+        }
+        else
+        {
+            switch (playerTwoPokemon)
+            {
+                case "Pikachu":
+                    switch (PikachuAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
+                    {
+                        case 0:
+                            UseAttack(Pikachu, Charizard, latigo);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 1:
+                            UseAttack(Pikachu, Charizard, ataqueRapido);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 2:
+                            UseAttack(Pikachu, Charizard, impactrueno);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 3:
+                            UseAttack(Pikachu, Charizard, bolaVoltio);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 4:
+                            UseAttack(Pikachu, Charizard, ondaTrueno);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 5:
+                            UseAttack(Pikachu, Charizard, amago);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 6:
+                            break;
+                    }
+                    return PlayerOne;
+                case "Charizard":
+                    switch (CharizardAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
+                    {
+                        case 0:
+                            UseAttack(Charizard, Pikachu, ataqueAla);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 1:
+                            UseAttack(Charizard, Pikachu, tajoAereo);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 2:
+                            UseAttack(Charizard, Pikachu, aranazo);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 3:
+                            UseAttack(Charizard, Pikachu, envisteIgneo);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 4:
+                            UseAttack(Charizard, Pikachu, ondaIgnea);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 5:
+                            UseAttack(Charizard, Pikachu, ascuas);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 6:
+                            UseAttack(Charizard, Pikachu, garraDragon);
+                            PlayerOne = !PlayerOne;
+                            break;
+                        case 7:
+                            break;
+                    }
+                    return PlayerOne;
+            }
+        }
+        return PlayerOne;
+    }
+
+    public bool RunBagMenu(string playerOnePokemon, string playerTwoPokemon, bool playerOne, int playerOnePokemonCurrentHP, int playerTwoPokemonCurrentHP)
+    {
+        bool PlayerOne = playerOne;
+        if (playerOne)
+        {
+
+            switch (PlayerOneBagMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
             {
                 case 0:
-                    if (playerOne)
-                    {
-                        switch (playerOnePokemon)
-                        {
-                            case "Pikachu":
-                                switch (pikachuAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
-                                {
-                                    case 0:
-                                        Console.WriteLine(@$"
-                                {Spaces}PIKACHU, USA LÁTIGO!");
-                                        Thread.Sleep(2000);
-                                        AtaquePikachu();
-                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, latigo.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 1:
-                                        Console.WriteLine(@$"
-                                {Spaces}PIKACHU, ATAQUE RÁPIDO!");
-                                        Thread.Sleep(2000);
-                                        AtaquePikachu();
-                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, ataqueRapido.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 2:
-                                        Console.WriteLine(@$"
-                                {Spaces}PIKACHU, USA IMPACTRUENO!");
-                                        Thread.Sleep(2000);
-                                        AtaquePikachu();
-                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, impactrueno.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 3:
-                                        Console.WriteLine(@$"
-                                {Spaces}PIKACHU, USA BOLA VOLTIO!");
-                                        Thread.Sleep(2000);
-                                        AtaquePikachu();
-                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, bolaVoltio.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 4:
-                                        Console.WriteLine(@$"
-                                {Spaces}PIKACHU, USA ONDA TRUENO!");
-                                        Thread.Sleep(2000);
-                                        AtaquePikachu();
-                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, ondaTrueno.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 5:
-                                        Console.WriteLine(@$"
-                                {Spaces}PIKACHU, USA AMAGO!");
-                                        Thread.Sleep(2000);
-                                        AtaquePikachu();
-                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, amago.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 6:
-                                        break;
-                                }
-                                break;
-                            case "Charizard":
-                                switch (charizardAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
-                                {
-                                    case 0:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA ATAQUE ALA!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, ataqueAla.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 1:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA TAJO AEREO!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Sp. Attack"], Pikachu, tajoAereo.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 2:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA ARANAZO!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, aranazo.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 3:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA ENVISTE IGNEO!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Sp. Attack"], Pikachu, envisteIgneo.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 4:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA ONDA IGNEA!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Sp. Attack"], Pikachu, ondaIgnea.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 5:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA ASCUAS!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Sp. Attack"], Pikachu, ascuas.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 6:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA GARRA DRAGÓN!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Sp. Attack"], Pikachu, garraDragon.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 7:
-                                        break;
-                                }
-                                break;
-                        }
-                    }
-                    else
-                    {
-
-                        switch (playerTwoPokemon)
-                        {
-                            case "Pikachu":
-                                switch (pikachuAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
-                                {
-                                    case 0:
-                                        Console.WriteLine(@$"
-                                {Spaces}PIKACHU, USA LÁTIGO!");
-                                        Thread.Sleep(2000);
-                                        AtaquePikachu();
-                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, latigo.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 1:
-                                        Console.WriteLine(@$"
-                                {Spaces}PIKACHU, ATAQUE RÁPIDO!");
-                                        Thread.Sleep(2000);
-                                        AtaquePikachu();
-                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, ataqueRapido.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 2:
-                                        Console.WriteLine(@$"
-                                {Spaces}PIKACHU, USA IMPACTRUENO!");
-                                        Thread.Sleep(2000);
-                                        AtaquePikachu();
-                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, impactrueno.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 3:
-                                        Console.WriteLine(@$"
-                                {Spaces}PIKACHU, USA BOLA VOLTIO!");
-                                        Thread.Sleep(2000);
-                                        AtaquePikachu();
-                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, bolaVoltio.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 4:
-                                        Console.WriteLine(@$"
-                                {Spaces}PIKACHU, USA ONDA TRUENO!");
-                                        Thread.Sleep(2000);
-                                        AtaquePikachu();
-                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, ondaTrueno.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 5:
-                                        Console.WriteLine(@$"
-                                {Spaces}PIKACHU, USA AMAGO!");
-                                        Thread.Sleep(2000);
-                                        AtaquePikachu();
-                                        decreaseHP(Pikachu.inGameStats["Attack"], Charizard, amago.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 6:
-                                        break;
-                                }
-                                break;
-                            case "Charizard":
-                                switch (charizardAttackMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
-                                {
-                                    case 0:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA ATAQUE ALA!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, ataqueAla.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 1:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA TAJO AEREO!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Sp. Attack"], Pikachu, tajoAereo.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 2:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA ARANAZO!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Attack"], Pikachu, aranazo.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 3:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA ENVISTE IGNEO!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Sp. Attack"], Pikachu, envisteIgneo.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 4:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA ONDA IGNEA!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Sp. Attack"], Pikachu, ondaIgnea.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 5:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA ASCUAS!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Sp. Attack"], Pikachu, ascuas.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 6:
-                                        Console.WriteLine(@$"
-                                {Spaces}CHARIZARD, USA GARRA DRAGÓN!");
-                                        Thread.Sleep(2000);
-                                        AtaqueCharizard();
-                                        decreaseHP(Charizard.inGameStats["Sp. Attack"], Pikachu, garraDragon.MoveType);
-                                        playerOne = !playerOne;
-                                        break;
-                                    case 7:
-                                        break;
-                                }
-                                break;
-                        }
-
-                    }
+                    itemsFunctionality(PlayerOneBagMenu.Options[0], playerOnePokemon, playerTwoPokemon, playerOne);
+                    PlayerOneBagMenu.Options[0] = "-";
+                    PlayerOne = !PlayerOne;
                     break;
-
                 case 1:
-                    if (playerOne == true)
-                    {
-
-                        switch (PlayerOneBagMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
-                        {
-                            case 0:
-                                itemsFunctionality(PlayerOneBagMenu.Options[0], playerOnePokemon, playerTwoPokemon, playerOne);
-                                PlayerOneBagMenu.Options[0] = "-";
-                                playerOne = !playerOne;
-                                break;
-                            case 1:
-                                itemsFunctionality(PlayerOneBagMenu.Options[1], playerOnePokemon, playerTwoPokemon, playerOne);
-                                PlayerOneBagMenu.Options[1] = "-";
-                                playerOne = !playerOne;
-                                break;
-                            case 2:
-                                itemsFunctionality(PlayerOneBagMenu.Options[2], playerOnePokemon, playerTwoPokemon, playerOne);
-                                PlayerOneBagMenu.Options[2] = "-";
-                                playerOne = !playerOne;
-                                break;
-                            case 3:
-                                itemsFunctionality(PlayerOneBagMenu.Options[3], playerOnePokemon, playerTwoPokemon, playerOne);
-                                PlayerOneBagMenu.Options[3] = "-";
-                                playerOne = !playerOne;
-                                break;
-                            case 4:
-                                itemsFunctionality(PlayerOneBagMenu.Options[4], playerOnePokemon, playerTwoPokemon, playerOne);
-                                PlayerOneBagMenu.Options[4] = "-";
-                                playerOne = !playerOne;
-                                break;
-                            case 5:
-                                itemsFunctionality(PlayerOneBagMenu.Options[5], playerOnePokemon, playerTwoPokemon, playerOne);
-                                PlayerOneBagMenu.Options[5] = "-";
-                                playerOne = !playerOne;
-                                break;
-                            case 6:
-                                break;
-
-                        }
-                    }
-                    else
-                    {
-                        switch (PlayerTwoBagMenu.Run(playerTwoPokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
-                        {
-                            case 0:
-                                itemsFunctionality(PlayerTwoBagMenu.Options[0], playerOnePokemon, playerTwoPokemon, playerOne);
-                                PlayerTwoBagMenu.Options[0] = "-";
-                                playerOne = !playerOne;
-                                break;
-                            case 1:
-                                itemsFunctionality(PlayerTwoBagMenu.Options[1], playerOnePokemon, playerTwoPokemon, playerOne);
-                                PlayerTwoBagMenu.Options[1] = "-";
-                                playerOne = !playerOne;
-                                break;
-                            case 2:
-                                itemsFunctionality(PlayerTwoBagMenu.Options[2], playerOnePokemon, playerTwoPokemon, playerOne);
-                                PlayerTwoBagMenu.Options[2] = "-";
-                                playerOne = !playerOne;
-                                break;
-                            case 3:
-                                itemsFunctionality(PlayerTwoBagMenu.Options[3], playerOnePokemon, playerTwoPokemon, playerOne);
-                                PlayerTwoBagMenu.Options[3] = "-";
-                                playerOne = !playerOne;
-                                break;
-                            case 4:
-                                itemsFunctionality(PlayerTwoBagMenu.Options[4], playerOnePokemon, playerTwoPokemon, playerOne);
-                                PlayerTwoBagMenu.Options[4] = "-";
-                                playerOne = !playerOne;
-                                break;
-                            case 5:
-                                itemsFunctionality(PlayerTwoBagMenu.Options[5], playerOnePokemon, playerTwoPokemon, playerOne);
-                                PlayerTwoBagMenu.Options[5] = "-";
-                                playerOne = !playerOne;
-                                break;
-                            case 6:
-                                break;
-                        }
-                    }
+                    itemsFunctionality(PlayerOneBagMenu.Options[1], playerOnePokemon, playerTwoPokemon, playerOne);
+                    PlayerOneBagMenu.Options[1] = "-";
+                    PlayerOne = !PlayerOne;
                     break;
                 case 2:
-                    if (playerOne == true)
-                    {
-                        switch (playerOnePokemon)
-                        {
-                            case "Pikachu":
-
-                                PikachuInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
-                                break;
-
-                            case "Charizard":
-
-                                CharizardInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        switch (playerTwoPokemon)
-                        {
-                            case "Pikachu":
-                                PikachuInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
-                                break;
-                            case "Charizard":
-                                CharizardInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
-                                break;
-                        }
-                    }
+                    itemsFunctionality(PlayerOneBagMenu.Options[2], playerOnePokemon, playerTwoPokemon, playerOne);
+                    PlayerOneBagMenu.Options[2] = "-";
+                    PlayerOne = !PlayerOne;
                     break;
                 case 3:
-                    cantFleeMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+                    itemsFunctionality(PlayerOneBagMenu.Options[3], playerOnePokemon, playerTwoPokemon, playerOne);
+                    PlayerOneBagMenu.Options[3] = "-";
+                    PlayerOne = !PlayerOne;
+                    break;
+                case 4:
+                    itemsFunctionality(PlayerOneBagMenu.Options[4], playerOnePokemon, playerTwoPokemon, playerOne);
+                    PlayerOneBagMenu.Options[4] = "-";
+                    PlayerOne = !PlayerOne;
+                    break;
+                case 5:
+                    itemsFunctionality(PlayerOneBagMenu.Options[5], playerOnePokemon, playerTwoPokemon, playerOne);
+                    PlayerOneBagMenu.Options[5] = "-";
+                    PlayerOne = !PlayerOne;
+                    break;
+                case 6:
                     break;
 
             }
         }
+        else
+        {
+            switch (PlayerTwoBagMenu.Run(playerTwoPokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
+            {
+                case 0:
+                    itemsFunctionality(PlayerTwoBagMenu.Options[0], playerOnePokemon, playerTwoPokemon, playerOne);
+                    PlayerTwoBagMenu.Options[0] = "-";
+                    PlayerOne = !PlayerOne;
+                    break;
+                case 1:
+                    itemsFunctionality(PlayerTwoBagMenu.Options[1], playerOnePokemon, playerTwoPokemon, playerOne);
+                    PlayerTwoBagMenu.Options[1] = "-";
+                    PlayerOne = !PlayerOne;
+                    break;
+                case 2:
+                    itemsFunctionality(PlayerTwoBagMenu.Options[2], playerOnePokemon, playerTwoPokemon, playerOne);
+                    PlayerTwoBagMenu.Options[2] = "-";
+                    PlayerOne = !PlayerOne;
+                    break;
+                case 3:
+                    itemsFunctionality(PlayerTwoBagMenu.Options[3], playerOnePokemon, playerTwoPokemon, playerOne);
+                    PlayerTwoBagMenu.Options[3] = "-";
+                    PlayerOne = !PlayerOne;
+                    break;
+                case 4:
+                    itemsFunctionality(PlayerTwoBagMenu.Options[4], playerOnePokemon, playerTwoPokemon, playerOne);
+                    PlayerTwoBagMenu.Options[4] = "-";
+                    PlayerOne = !PlayerOne;
+                    break;
+                case 5:
+                    itemsFunctionality(PlayerTwoBagMenu.Options[5], playerOnePokemon, playerTwoPokemon, playerOne);
+                    PlayerTwoBagMenu.Options[5] = "-";
+                    PlayerOne = !PlayerOne;
+                    break;
+                case 6:
+                    break;
+            }
+        }
+        return PlayerOne;
+    }
+
+    public bool RunInfoMenu(string playerOnePokemon, string playerTwoPokemon, bool playerOne, int playerOnePokemonCurrentHP, int playerTwoPokemonCurrentHP)
+    {
+        // PlayerOne is never reversed since it's just an info menu
+
+        bool PlayerOne = playerOne;
+        if (playerOne == true)
+        {
+            switch (playerOnePokemon)
+            {
+                case "Pikachu":
+
+                    PikachuInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+                    break;
+
+                case "Charizard":
+
+                    CharizardInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+                    break;
+            }
+        }
+        else
+        {
+            switch (playerTwoPokemon)
+            {
+                case "Pikachu":
+                    PikachuInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+                    break;
+                case "Charizard":
+                    CharizardInfoMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+                    break;
+            }
+        }
+        return PlayerOne;
+    }
+
+    public void GameOver()
+    {
         Console.WriteLine(@"
                             
                                                                                                                             GAME OVER!
@@ -963,6 +875,38 @@ class Game
         }
 
         Console.ReadLine();
+    }
+
+
+
+    public void Run(string playerOnePokemon, string playerTwoPokemon)
+    {
+        bool running = true;
+        bool playerOne = true;
+
+        while (running && PlayersPokemons["First Player Pokemon"].inGameStats["HP"] > 0 && PlayersPokemons["Second Player Pokemon"].inGameStats["HP"] > 0)
+        {
+            switch (GameMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]))
+            {
+                case 0:
+                    playerOne = RunAttackMenu(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+                    break;
+
+                case 1:
+                    playerOne = RunBagMenu(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+                    break;
+
+                case 2:
+                    playerOne = RunInfoMenu(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+                    break;
+                case 3:
+                    CantFleeMenu.Run(playerOnePokemon, playerTwoPokemon, playerOne, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+                    break;
+            }
+        }
+
+        GameOver();
+
         return;
     }
 

@@ -17,9 +17,9 @@ class Program
 
         string[] items = File.ReadAllLines(itemsFile)!;
 
-        string prompt = "Qué desea hacer?";
-        string gamePrompt = @"   JUGADOR 1 
-                                                                                            Seleccione su Pokemón";
+        string prompt = "QUÉ DESEA HACER?";
+        string gamePrompt = "JUGADOR 1, SELECCIONE";
+        int X_POSITION = 96;
         // string engPrompt = "What would you like to do?";
         string currentLanguage = "esp";
 
@@ -55,6 +55,9 @@ class Program
                             Console.WriteLine(@$"
 
 
+
+
+
                                                                                               JUGADOR 1: {firstPlayerPokemon}");
 
                             Console.ForegroundColor = ConsoleColor.Red;
@@ -63,7 +66,6 @@ class Program
 
                             Console.ResetColor();
                             Console.WriteLine(@"
-                                                    
                                                                                           Presione 'ENTER' para comenzar.");
                             Console.ReadLine();
 
@@ -81,6 +83,9 @@ class Program
                             Console.WriteLine(@$"
 
 
+
+
+
                                                                                               JUGADOR 1: {firstPlayerPokemon}");
 
                             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -89,7 +94,6 @@ class Program
 
                             Console.ResetColor();
                             Console.WriteLine(@"
-                                                    
                                                                                           Presione 'ENTER' para comenzar.");
                             Console.ReadLine();
 
@@ -107,14 +111,28 @@ class Program
                     switch (settingsMenu.Run())
                     {
                         case 0:
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.SetCursorPosition(X_POSITION + 3, 41);
+                            Console.WriteLine("NO DISPONIBLE");
                             Console.ReadLine();
+                            Console.ResetColor();
                             break;
                         case 1:
                             switch (languageMenu.Run())
                             {
                                 case 0:
+                                    Console.SetCursorPosition(X_POSITION - 3, 41);
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("EL JUEGO YA ESTÁ EN ESPAÑOL");
+                                    Console.ReadLine();
+                                    Console.ResetColor();
                                     break;
                                 case 1:
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.SetCursorPosition(X_POSITION + 3, 41);
+                                    Console.WriteLine("NO DISPONIBLE");
+                                    Console.ReadLine();
+                                    Console.ResetColor();
                                     break;
                                 case 2:
                                     break;
@@ -131,6 +149,7 @@ class Program
                         string dot = ".";
 
                         Console.WriteLine();
+                        Console.SetCursorPosition(X_POSITION + 3, 41);
                         Console.Write(@"Saliendo");
 
                         //Adds a dot for the loading animation
@@ -141,6 +160,7 @@ class Program
                         }
 
                         // Sets running to false so the while does not execute anymore
+                        Console.Clear();
                         running = false;
 
                     }

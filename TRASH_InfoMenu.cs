@@ -1,32 +1,18 @@
-class FightMenu
+class InfoMenu2
 {
-    protected int SelectedIndex;
-    protected string[] Options;
-    protected string Prompt;
+    private int SelectedIndex;
+    private string[] Options;
+    private string Prompt;
     private bool EnterWasPressed;
     private string[] YesOrNo;
     private string[] SiONo;
-    protected string pokemonsAscii;
-    private int firstPlayerHP;
-    private int secondPlayerHP;
-    public int FirstPokemonBaseHP;
-    protected int SecondPokemonBaseHP;
+    private string pokemonsAscii;
+    private int FirstPokemonBaseHP;
+    private int SecondPokemonBaseHP;
 
-    public string PokemonsAscii
-    {
-        get { return pokemonsAscii; }
-    }
-
-
-    private int SecondPlayerHP
-    {
-        get { return secondPlayerHP; }
-    }
-
-    public FightMenu(string[] options, string prompt, int firstPokemonBaseHP, int secondPokemonBaseHP)
+    public InfoMenu2(string[] options, string prompt, int firstPokemonBaseHP, int secondPokemonBaseHP)
     {
         Console.CursorVisible = false;
-
 
         Options = options;
         Prompt = prompt;
@@ -68,6 +54,8 @@ class FightMenu
                            MMMMMMMMMMMMMMMMMMMMMMM                                                                                                           MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
                            MMMMMMMMMMMMMMMMMMMMMM                                                                                                             MMMMMMMMM            MMMMMMM
                          MMMMMM               MMMMM                                                                                                         MMMMMMMMMMMM           MMMMMMMMM
+                                                               
+
 
 
 
@@ -76,7 +64,7 @@ class FightMenu
 
     }
 
-    protected virtual void DisplayOptions(string playerOnePokemon, int playerOnePokemonCurrentHP, int playerTwoPokemonCurrentHP)
+    private void DisplayOptions(string playerOnePokemon, int playerOnePokemonCurrentHP, int playerTwoPokemonCurrentHP)
     {
         Console.Clear();
         ConsoleColor foregroundColor = ConsoleColor.White;
@@ -93,19 +81,16 @@ class FightMenu
         Console.Write($"{playerTwoPokemonCurrentHP}/{SecondPokemonBaseHP}");
 
         Console.WriteLine(@$"                                               
-                                                                                                {Prompt}
-                                                                                                
+                                                                                            {Prompt}
+                                                                                            
 
-                                                                                                 {playerOnePokemon.ToUpper()}
+                                                                                               {playerOnePokemon.ToUpper()}
             
             
             ");
 
-        string spaces = @"                                                                             ";
+        string spaces = @"                                                                                          ";
         Console.Write(spaces);
-
-
-
 
         for (int i = 0; i < Options.Length; i++)
         {
@@ -187,12 +172,14 @@ class FightMenu
         }
     }
 
+
     public int Run(string playerOnePokemon, string playerTwoPokemon, bool playerOne, int playerOnePokemonCurrentHP, int playerTwoPokemonCurrentHP)
     {
         ConsoleKeyInfo pressedKey;
 
         while (true)
         {
+
 
             if (playerOne)
             {
@@ -213,10 +200,7 @@ class FightMenu
             }
 
         }
-
     }
-
-
 
 
     private void ResetVariables()

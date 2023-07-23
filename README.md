@@ -49,3 +49,11 @@ La clase `Pokemon.cs` se encarga de la creación de los pokemones como objetos, 
 Las `Bag`s o mochilas son objetos cuya función es almacenar los items aleatorios generados para los jugadores. Cada jugador tiene una mochila, y esta genera items aleatorios de una lista de items en cada partida.
 
 La clase `Bag.cs` Se encarga de la creación de estos objetos. Esta recibe un array de objetos aleatorios como parámetros y se los asigna a un array `Items` dentro de sí misma.
+
+## **Move Class**
+
+Los `Moves` hacen referencia a los movimientos y ataques de los pokemones. Esta clase se encarga de construir los movimientos y guardar tanto sus nombre como sus tipos. El daño de cada ataque es dependiente del daño de ataque, ataque especial y tipo de ataque del pokemon, de tal forma que las estadísticas del pokemon y el tipo de ataque afectan al daño recibido por el pokemon atacado.
+
+## **'TRASH' prefix**
+
+El prefijo `TRASH` en los nombre de algunos archivos `.cs` hace referencia a clases que han sido utilizadas anteriormente y que cumplieron con algún propósito, pero que ya han sido reemplazadas, mejoradas o rehechas, y quedan como archivos residuales en caso de ser necesarios en un futuro cercano.

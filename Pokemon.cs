@@ -29,8 +29,8 @@ class Pokemon
         inGameStats.Add("HP", 100);
         inGameStats.Add("Attack", rnd.Next(25, 50));
         inGameStats.Add("Defense", rnd.Next(25, 50));
-        inGameStats.Add("Sp. Attack", rnd.Next(25, 50));
-        inGameStats.Add("Sp. Defense", rnd.Next(10, 25));
+        inGameStats.Add("Sp. Attack", rnd.Next(25, 60));
+        inGameStats.Add("Sp. Defense", rnd.Next(10, 15));
         inGameStats.Add("Speed", rnd.Next(10, 31));
 
         // calculateInGameStats();

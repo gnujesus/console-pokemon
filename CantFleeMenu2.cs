@@ -1,11 +1,10 @@
-class InfoMenu : FightMenu
+class CantFleeMenu : FightMenu
 {
-    public InfoMenu(string[] options, string prompt, int firstPokemonBaseHP, int secondPokemonBaseHP)
+    public CantFleeMenu(string[] options, string prompt, int firstPokemonBaseHP, int secondPokemonBaseHP)
     : base(options, prompt, firstPokemonBaseHP, secondPokemonBaseHP)
     {
 
     }
-
     protected override void DisplayOptions(string playerOnePokemon, int playerOnePokemonCurrentHP, int playerTwoPokemonCurrentHP)
     {
         Console.Clear();
@@ -23,7 +22,8 @@ class InfoMenu : FightMenu
         Console.Write($"{playerTwoPokemonCurrentHP}/{SecondPokemonBaseHP}");
 
         Console.WriteLine(@$"                                               
-                                                                                                    {Prompt}
+                                                                                                {Prompt}
+
 
                                                                                                  {playerOnePokemon.ToUpper()}
 
@@ -55,7 +55,7 @@ class InfoMenu : FightMenu
             }
 
             // Since is only one option, it can be set before-hand
-            Console.SetCursorPosition(91, 48);
+            Console.SetCursorPosition(93, 44);
             Console.Write($"{prefix} {currentOption.ToUpper()}   ");
         }
         Console.ResetColor();

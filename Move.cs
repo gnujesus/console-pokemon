@@ -1,6 +1,6 @@
 class Move
 {
-    private string Name;
+    public string Name;
     public Types Type;
     public string MoveType;
 
@@ -11,4 +11,5 @@ class Move
         Type = new Types();
         MoveType = moveType;
     }
+
 }
