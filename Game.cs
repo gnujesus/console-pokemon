@@ -9,20 +9,30 @@ class Game
     private CantFleeMenu CantFleeMenu;
     private AttackMenu PikachuAttackMenu;
     private AttackMenu CharizardAttackMenu;
+
+    #endregion
+
+
+
+    #region Propmts 
     private string Prompt;
-    private string[] Options;
-    private string[] PlayerOneBagOptions;
-    private string[] PlayerTwoBagOptions;
-    private string[] InfoMenuOptions;
-    private string[] goBackOption;
     private string PikachuInfoMenuPrompt;
     private string CharizardInfoMenuPrompt;
     private string cantFleePrompt;
     private string attackMenuPrompt;
     private string cantCatchAnothersTrainerPokemonPrompt;
 
-    private Dictionary<string, Pokemon> PlayersPokemons;
-    public string Spaces;
+    #endregion
+
+
+
+    #region Options
+
+    private string[] AttackMenuOptions;
+    private string[] PlayerOneBagOptions;
+    private string[] PlayerTwoBagOptions;
+    private string[] InfoMenuOptions;
+    private string[] goBackOption;
 
     #endregion
 
@@ -35,6 +45,7 @@ class Game
     private Dictionary<string, Move> CharizardMoves;
     private string[] PikachuMoveOptions;
     private string[] CharizardMoveOptions;
+    private Dictionary<string, Pokemon> PlayersPokemons;
 
     #endregion
 
@@ -49,8 +60,7 @@ class Game
     #endregion 
 
 
-    #region Pikachu Moves
-
+    #region Pikachu Specific Moves
     Move latigo = new Move("Latigo", "Normal");
     Move ataqueRapido = new Move("Ataque Rapido", "Normal");
     Move amago = new Move("Amago", "Normal");
@@ -64,15 +74,13 @@ class Game
 
     #region Both Pokemon Moves
 
-
     Move grunido = new Move("Grunido", "Normal");
-
 
     #endregion
 
 
 
-    #region Charizard Moves
+    #region Charizard Specific Moves
     Move ataqueAla = new Move("Ataque Ala", "Flying");
     Move tajoAereo = new Move("Tajo Aereo", "Flying");
     Move aranazo = new Move("Aranazo", "Normal");
@@ -80,6 +88,12 @@ class Game
     Move ondaIgnea = new Move("Onda Ignea", "Fire");
     Move ascuas = new Move("Ascuas", "Fire");
     Move garraDragon = new Move("Garra Dragon", "Dragon");
+
+    #endregion
+
+
+    #region Other Variables
+    public string Spaces;
 
     #endregion
 
@@ -93,17 +107,24 @@ class Game
         PlayerOneBag = new Bag(GetRandomElements(Items));
         PlayerTwoBag = new Bag(GetRandomElements(Items));
 
-        Prompt = "QUÉ HARÁS?";
-        cantFleePrompt = "NO PUEDES HUIR!";
-        cantCatchAnothersTrainerPokemonPrompt = "NO PUEDES ATRAPAR EL POKEMON DE OTRO ENTRENADOR";
-        attackMenuPrompt = "ELIGE TU ATAQUE";
-        PikachuMoveOptions = new string[] { "Latigo", "Ataque Rápido", "Impactrueno", "Bola Voltio", "Onda Trueno", "Amago", "Volver Atrás" };
-        CharizardMoveOptions = new string[] { "Ataque Ala", "Tajo Aereo", "Aranazo", "Enviste Igneo", "Onda Ignea", "Ascuas", "Garra Dragon", "Volver Atrás" };
-        Options = new string[] { "Atacar", "Mochila", "Pokemon", "Huir" };
-
 
         Pikachu = new Pokemon("Pikachu", "Electric", 60, statistics(35, 55, 40, 50, 50, 90), individualValues(), effortValues(200, 40, 24, 136, 8, 148));
         Charizard = new Pokemon("Charizard", "Fire", 20, statistics(78, 84, 78, 109, 85, 100), individualValues(), effortValues(200, 30, 84, 112, 80, 32));
+
+        Prompt = "QUÉ HARÁS?";
+        cantFleePrompt = "NO PUEDES HUIR!";
+        attackMenuPrompt = "ELIGE TU ATAQUE";
+        cantCatchAnothersTrainerPokemonPrompt = "NO PUEDES ATRAPAR EL POKEMON DE OTRO ENTRENADOR";
+        CharizardInfoMenuPrompt = Charizard.returnInfo();
+        PikachuInfoMenuPrompt = Pikachu.returnInfo();
+
+        AttackMenuOptions = new string[] { "Atacar", "Mochila", "Pokemon", "Huir" };
+        PikachuMoveOptions = new string[] { "Latigo", "Ataque Rápido", "Impactrueno", "Bola Voltio", "Onda Trueno", "Amago", "Volver Atrás" };
+        CharizardMoveOptions = new string[] { "Ataque Ala", "Tajo Aereo", "Aranazo", "Enviste Igneo", "Onda Ignea", "Ascuas", "Garra Dragon", "Volver Atrás" };
+        InfoMenuOptions = new string[] { "Volver Atrás" };
+        PlayerOneBagOptions = PlayerOneBag.Items;
+        PlayerTwoBagOptions = PlayerTwoBag.Items;
+
 
         PlayersPokemons = new Dictionary<string, Pokemon>();
         PlayersPokemons.Add("First Player Pokemon", Pikachu);
@@ -130,18 +151,10 @@ class Game
         PikachuAttackMenu = new AttackMenu(PikachuMoveOptions, attackMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
         CharizardAttackMenu = new AttackMenu(CharizardMoveOptions, attackMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
 
-
-        PlayerOneBagOptions = PlayerOneBag.Items;
-        PlayerTwoBagOptions = PlayerTwoBag.Items;
         PlayerOneBagMenu = new BagMenu(PlayerOneBagOptions, Prompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
         PlayerTwoBagMenu = new BagMenu(PlayerTwoBagOptions, Prompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
-        GameMenu = new FightMenu(Options, Prompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
+        GameMenu = new FightMenu(AttackMenuOptions, Prompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
 
-
-
-        InfoMenuOptions = new string[] { "Volver Atrás" };
-        CharizardInfoMenuPrompt = Charizard.returnInfo();
-        PikachuInfoMenuPrompt = Pikachu.returnInfo();
         PikachuInfoMenu = new InfoMenu(InfoMenuOptions, PikachuInfoMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
         CharizardInfoMenu = new InfoMenu(InfoMenuOptions, CharizardInfoMenuPrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
         CantFleeMenu = new CantFleeMenu(InfoMenuOptions, cantFleePrompt, PlayersPokemons["First Player Pokemon"].inGameStats["HP"], PlayersPokemons["Second Player Pokemon"].inGameStats["HP"]);
@@ -209,7 +222,6 @@ class Game
         string[] finalRandomElements = randomElementsWithBackOption.ToArray();
 
         return finalRandomElements;
-
     }
 
     private void Heal(Pokemon healedPokemon, int Increment)
@@ -225,6 +237,8 @@ class Game
         }
     }
 
+
+    // Currently not working
     public void restoreAll(ref string currentEffect, ref int HP, int baseHealth, Pokemon healedPokemon)
     {
         switch (healedPokemon.Name)
@@ -234,8 +248,6 @@ class Game
                 Pikachu.inGameStats["HP"] = baseHealth;
                 Console.WriteLine("                 TODOS LOS EFECTOS HAN SIDO LIMPIADOS!");
                 break;
-
-
         }
     }
 
@@ -531,7 +543,7 @@ class Game
             Console.Clear();
             Console.WriteLine(framesPikachu[j]);
             if (j == 3) Thread.Sleep(900);
-            Thread.Sleep(700);
+            Thread.Sleep(400);
         };
         Console.WriteLine(@$"
                 
@@ -556,7 +568,7 @@ class Game
             Console.Clear();
             Console.WriteLine(frameCharizard[j]);
             if (j == 3) Thread.Sleep(900);
-            Thread.Sleep(700);
+            Thread.Sleep(400);
         };
         Console.WriteLine(@$"
                 

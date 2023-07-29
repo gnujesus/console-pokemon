@@ -38,20 +38,20 @@ class Pokemon
 
     public void calculateInGameStats()
     {
-        foreach (string value in inGameStats.Keys)
-        {
-            Console.WriteLine(value);
+        // foreach (string value in inGameStats.Keys)
+        // {
+        //     Console.WriteLine(value);
 
-            // if (value == "HP")
-            // {
-            //     inGameStats["HP"] = (((2 * BaseStats["HP"] + IVs["HP"] + (EVs["HP"] / 4) * Level)) / 100) + Level + 10;
-            // }
-            // else
-            // {
-            //     inGameStats[value] = ((((2 * BaseStats[value] + IVs[value] + (EVs[value] / 4) * Level)) / 100) + 5) * Nature;
-            // }
+        //     if (value == "HP")
+        //     {
+        //         inGameStats["HP"] = (((2 * BaseStats["HP"] + IVs["HP"] + (EVs["HP"] / 4) * Level)) / 100) + Level + 10;
+        //     }
+        //     else
+        //     {
+        //         inGameStats[value] = ((((2 * BaseStats[value] + IVs[value] + (EVs[value] / 4) * Level)) / 100) + 5) * Nature;
+        //     }
 
-        }
+        // }
     }
 
     public string returnInfo()
